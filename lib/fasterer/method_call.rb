@@ -28,7 +28,7 @@ module Fasterer
         element[1][0] == :call ? element[1][1] : element[1][1][1]
       when :method_add_arg
         element[1][1]
-      else
+      else # call or command_call
         element[1]
       end
     end
@@ -40,6 +40,8 @@ module Fasterer
         # element[1][2][1][1]
       when :method_add_arg
         (element[2][1].nil? ? [] : element[2][1][1]) || [] # need to fix this, if the first argument is a method without braces
+      when :command_call
+        element.last[1]
       else
         []
       end
@@ -59,6 +61,8 @@ module Fasterer
                          element[1][0] == :call ? element[1].last[1] : element[1][1].last[1]
                        when :call
                          element.last[1]
+                       when :command_call
+                         element[3][1]
                        end
       end
 

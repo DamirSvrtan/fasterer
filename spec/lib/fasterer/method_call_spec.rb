@@ -145,6 +145,24 @@ describe Fasterer::MethodCall do
 
   end
 
+  describe 'method call with an argument without brackets' do
+
+    let(:file_name) { 'method_call_without_brackets.rb' }
+
+    let(:call_element) { ripper.drop(1).first.first }
+
+    it 'should detect argument' do
+      expect(method_call.method_name).to eq('fetch')
+      expect(method_call.arguments.count).to eq(2)
+      expect(method_call.arguments[0].type).to eq(:symbol_literal)
+      expect(method_call.arguments[1].type).to eq(:symbol_literal)
+      # expect(method_call.receiver).to be_a(Fasterer::MethodCall)
+      # expect(method_call.receiver.name).to eq('hi')
+    end
+
+  end
+
+
   describe 'method call with two arguments' do
 
     let(:file_name) { 'method_call_with_two_arguments.rb' }
