@@ -106,7 +106,7 @@ module Fasterer
       when 'each_with_index'
         error_occurrence[:each_with_index_vs_while] += 1
       when 'first'
-        return unless method_call.receiver.is_a?(MethodCall)
+        return method_call unless method_call.receiver.is_a?(MethodCall)
         case method_call.receiver.name
         when 'shuffle'
           error_occurrence[:shuffle_first_vs_sample] += 1
@@ -114,7 +114,7 @@ module Fasterer
           error_occurrence[:select_first_vs_detect] += 1
         end
       when 'each'
-        return unless method_call.receiver.is_a?(MethodCall)
+        return method_call unless method_call.receiver.is_a?(MethodCall)
         case method_call.receiver.name
         when 'reverse'
           error_occurrence[:reverse_each_vs_reverse_each] += 1
@@ -122,7 +122,7 @@ module Fasterer
           error_occurrence[:keys_each_vs_each_key] += 1
         end
       when 'flatten'
-        return unless method_call.receiver.is_a?(MethodCall)
+        return method_call unless method_call.receiver.is_a?(MethodCall)
         if method_call.receiver.name == 'map' && method_call.arguments.count == 1 && method_call.arguments.first.value == "1"
           error_occurrence[:map_flatten_vs_flat_map] += 1
         end
