@@ -1,0 +1,6 @@
+AllCops:
+  Include:
+    - '**/Rakefile'
+  Exclude:
+    - 'spec/support/**/*'
+    - 'spec/spec_helper.rb'
