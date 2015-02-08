@@ -162,6 +162,38 @@ describe Fasterer::MethodCall do
 
   end
 
+  describe 'method call without an explicit receiver' do
+
+    let(:file_name) { 'method_call_with_an_implicit_receiver.rb' }
+
+    let(:call_element) { ripper.drop(1).first.first }
+
+    it 'should detect two arguments' do
+      expect(method_call.method_name).to eq('fetch')
+      expect(method_call.arguments.count).to eq(2)
+      expect(method_call.arguments[0].type).to eq(:symbol_literal)
+      expect(method_call.arguments[1].type).to eq(:symbol_literal)
+      expect(method_call.receiver).to be_nil
+    end
+
+  end
+
+  describe 'method call without an explicit receiver and without brackets' do
+
+    let(:file_name) { 'method_call_with_an_implicit_receiver_and_no_brackets.rb' }
+
+    let(:call_element) { ripper.drop(1).first.first }
+
+    it 'should detect two arguments' do
+      expect(method_call.method_name).to eq('fetch')
+      expect(method_call.arguments.count).to eq(2)
+      expect(method_call.arguments[0].type).to eq(:symbol_literal)
+      expect(method_call.arguments[1].type).to eq(:symbol_literal)
+      expect(method_call.receiver).to be_nil
+    end
+
+  end
+
 
   describe 'method call with two arguments' do
 

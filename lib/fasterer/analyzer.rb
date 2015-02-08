@@ -38,7 +38,7 @@ module Fasterer
         when :def
           scan_method_definitions(element)
           scan_sexp_tree(element)
-        when :call, :method_add_block, :method_add_arg
+        when :call, :method_add_block, :method_add_arg, :command_call
           method_call = scan_method_calls(element)
           scan_sexp_tree(method_call.receiver_element)
           scan_sexp_tree(method_call.arguments_element)

@@ -42,6 +42,8 @@ module Fasterer
         (element[2][1].nil? ? [] : element[2][1][1]) || [] # need to fix this, if the first argument is a method without braces
       when :command_call
         element.last[1]
+      when :command
+        element[2][1]
       else
         []
       end
@@ -63,6 +65,8 @@ module Fasterer
                          element.last[1]
                        when :command_call
                          element[3][1]
+                       when :command
+                         element[1][1]
                        end
       end
 
