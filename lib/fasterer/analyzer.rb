@@ -2,7 +2,6 @@ require 'ripper'
 require 'pry'
 require 'fasterer/method_definition'
 require 'fasterer/method_call'
-require 'fasterer/command_call'
 require 'fasterer/rescue_call'
 require 'fasterer/parse_error'
 
@@ -38,14 +37,11 @@ module Fasterer
         when :def
           scan_method_definitions(element)
           scan_sexp_tree(element)
-        when :call, :method_add_block, :method_add_arg, :command_call
+        when :call, :method_add_block, :method_add_arg, :command_call, :command
           method_call = scan_method_calls(element)
           scan_sexp_tree(method_call.receiver_element)
           scan_sexp_tree(method_call.arguments_element)
           scan_sexp_tree(method_call.block_body) if method_call.has_block?
-        when :command
-          scan_commands(element)
-          scan_sexp_tree(element)
         when :massign
           scan_parallel_assignment(element)
           scan_sexp_tree(element)
@@ -95,6 +91,8 @@ module Fasterer
       method_call = MethodCall.new(element)
 
       case method_call.method_name
+      when 'module_eval'
+        error_occurrence[:module_eval] += 1
       when 'gsub'
         unless method_call.arguments.first.type == :regexp_literal
           error_occurrence[:gsub_vs_tr] += 1
@@ -129,15 +127,6 @@ module Fasterer
       end
 
       method_call
-    end
-
-    def scan_commands(element)
-      command_call = CommandCall.new(element)
-
-      case command_call.name
-      when 'module_eval'
-        error_occurrence[:module_eval] += 1
-      end
     end
 
     def scan_parallel_assignment(element)
