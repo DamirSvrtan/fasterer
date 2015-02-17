@@ -1,0 +1,3 @@
+fetch :writing do
+end
+

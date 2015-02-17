@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Fasterer::MethodCall do
 
   let(:ripper) do
-    Ripper.sexp(File.read(RSpec.root.join('support', 'method_call', file_name)))
+    Ripper.sexp(code)
   end
 
   let(:method_call) do
@@ -12,7 +12,9 @@ describe Fasterer::MethodCall do
 
   describe 'method call on a constant' do
 
-    let(:file_name) { 'method_call_on_constant.rb' }
+    # let(:code) { 'method_call_on_constant.rb' }
+
+    let(:code) { "User.hello()" }
 
     # This is where the :call token will be recognized.
     let(:call_element) { ripper.drop(1).first.first[1] }
@@ -26,7 +28,7 @@ describe Fasterer::MethodCall do
 
   describe 'method call on a integer' do
 
-    let(:file_name) { 'method_call_on_integer.rb' }
+    let(:code) { '1.hello()' }
 
     # This is where the :call token will be recognized.
     let(:call_element) { ripper.drop(1).first.first[1] }
@@ -40,7 +42,7 @@ describe Fasterer::MethodCall do
 
   describe 'method call on a string' do
 
-    let(:file_name) { 'method_call_on_string.rb' }
+    let(:code) { "'hello'.hello()" }
 
     let(:call_element) { ripper.drop(1).first.first[1] }
 
@@ -53,7 +55,10 @@ describe Fasterer::MethodCall do
 
   describe 'method call on a variable' do
 
-    let(:file_name) { 'method_call_on_variable.rb' }
+    let(:code) do
+      "number_one = 1\n"\
+      "number_one.hello()"
+    end
 
     let(:call_element) { ripper.drop(1).first.last[1] }
 
@@ -67,7 +72,7 @@ describe Fasterer::MethodCall do
 
   describe 'method call on a method' do
 
-    let(:file_name) { 'method_call_on_method_call.rb' }
+    let(:code) { '1.hi(2).hello()' }
 
     let(:call_element) { ripper.drop(1).first.first[1] }
 
@@ -82,7 +87,7 @@ describe Fasterer::MethodCall do
 
   describe 'method call with equals operator' do
 
-    let(:file_name) { 'method_call_with_equals.rb' }
+    let(:code) { 'method_call_with_equals.rb' }
 
     let(:call_element) { ripper.drop(1).first.first[1] }
 
@@ -99,7 +104,15 @@ describe Fasterer::MethodCall do
   # before recognizing method calls arguments.
   describe 'method call with a block' do
 
-    let(:file_name) { 'method_call_with_a_block.rb' }
+    let(:code) do
+      <<-code
+        number_one = 1
+        number_one.fetch do |el|
+          number_two = 2
+          number_three = 3
+        end
+      code
+    end
 
     let(:call_element) { ripper.drop(1).first.last }
 
@@ -114,7 +127,12 @@ describe Fasterer::MethodCall do
 
   describe 'method call with an argument and a block' do
 
-    let(:file_name) { 'method_call_with_an_argument_and_a_block.rb' }
+    let(:code) do
+      <<-code
+        number_one = 1
+        number_one.fetch(:writing) { [*1..100] }
+      code
+    end
 
     let(:call_element) { ripper.drop(1).first.last }
 
@@ -131,7 +149,7 @@ describe Fasterer::MethodCall do
   # method_add_arg
   describe 'method call with an argument' do
 
-    let(:file_name) { 'method_call_with_one_argument.rb' }
+    let(:code) { '{}.fetch(:writing)' }
 
     let(:call_element) { ripper.drop(1).first.first }
 
@@ -147,7 +165,7 @@ describe Fasterer::MethodCall do
 
   describe 'method call with an argument without brackets' do
 
-    let(:file_name) { 'method_call_without_brackets.rb' }
+    let(:code) { '{}.fetch :writing, :listening' }
 
     let(:call_element) { ripper.drop(1).first.first }
 
@@ -164,7 +182,7 @@ describe Fasterer::MethodCall do
 
   describe 'method call without an explicit receiver' do
 
-    let(:file_name) { 'method_call_with_an_implicit_receiver.rb' }
+    let(:code) { 'fetch(:writing, :listening)' }
 
     let(:call_element) { ripper.drop(1).first.first }
 
@@ -180,7 +198,7 @@ describe Fasterer::MethodCall do
 
   describe 'method call without an explicit receiver and without brackets' do
 
-    let(:file_name) { 'method_call_with_an_implicit_receiver_and_no_brackets.rb' }
+    let(:code) { 'fetch :writing, :listening' }
 
     let(:call_element) { ripper.drop(1).first.first }
 
@@ -194,10 +212,33 @@ describe Fasterer::MethodCall do
 
   end
 
+  describe 'method call without an explicit receiver and without brackets and do end' do
+
+    let(:code) do
+      <<-code
+        "fetch :writing do\n"\
+        "end"
+      code
+    end
+
+    let(:call_element) { ripper.drop(1).first.first }
+
+    it 'should detect argument and a block' do
+      # expect(method_call.method_name).to eq('fetch')
+      # expect(method_call.arguments.count).to eq(2)
+      # expect(method_call.arguments[0].type).to eq(:symbol_literal)
+      # expect(method_call.arguments[1].type).to eq(:symbol_literal)
+      # expect(method_call.receiver).to be_nil
+    end
+
+  end
 
   describe 'method call with two arguments' do
 
-    let(:file_name) { 'method_call_with_two_arguments.rb' }
+    let(:code) do
+      "number_one = 1\n"\
+      "number_one.fetch(:writing, :zumba)"
+    end
 
     let(:call_element) { ripper.drop(1).first.last }
 
@@ -213,7 +254,7 @@ describe Fasterer::MethodCall do
 
   describe 'method call with a regex argument' do
 
-    let(:file_name) { 'method_call_with_a_regex_argument.rb' }
+    let(:code) { '{}.fetch(/.*/)' }
 
     let(:call_element) { ripper.drop(1).first.first }
 
@@ -227,7 +268,7 @@ describe Fasterer::MethodCall do
 
   describe 'method call with a integer argument' do
 
-    let(:file_name) { 'method_call_with_a_integer_argument.rb' }
+    let(:code) { '[].flatten(1)' }
 
     let(:call_element) { ripper.drop(1).first.first }
 

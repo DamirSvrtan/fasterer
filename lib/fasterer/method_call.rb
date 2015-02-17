@@ -25,7 +25,13 @@ module Fasterer
     def receiver_element
       case token
       when :method_add_block
-        element[1][0] == :call ? element[1][1] : element[1][1][1]
+        if element[1][0] == :command
+          nil
+        elsif element[1][0] == :call
+          element[1][1]
+        else
+          element[1][1][1]
+        end
       when :method_add_arg
         element[1][1]
       else # call or command_call
@@ -56,18 +62,24 @@ module Fasterer
       end
 
       def set_method_name
-        @method_name = case token
-                       when :method_add_arg
-                         element[1].last[1]
-                       when :method_add_block
-                         element[1][0] == :call ? element[1].last[1] : element[1][1].last[1]
-                       when :call
-                         element.last[1]
-                       when :command_call
-                         element[3][1]
-                       when :command
-                         element[1][1]
-                       end
+        @method_name =  case token
+                        when :method_add_arg
+                          element[1].last[1]
+                        when :method_add_block
+                          if element[1][0] == :command
+                            element[1][1][1]
+                          elsif element[1][0] == :call
+                            element[1].last[1]
+                          else
+                            element[1][1].last[1]
+                          end
+                        when :call
+                          element.last[1]
+                        when :command_call
+                          element[3][1]
+                        when :command
+                          element[1][1]
+                        end
       end
 
       def set_arguments
@@ -99,6 +111,7 @@ module Fasterer
     attr_reader :method
 
     def self.new(receiver_info)
+      return if receiver_info.nil?
       token = receiver_info.first
 
       case token
