@@ -13,14 +13,13 @@ module Fasterer
     private
 
       def set_rescue_classes
-        case element.drop(1).flatten.first
-        when :mrhs_new_from_args
-          set_multiple_rescue_classes
-        when :var_ref
-          set_single_rescue_class
-        when nil
-          @rescue_classes = []
-        end
+        return if element[1].sexp_type != :array
+
+        @rescue_classes = element[1].drop(1).map do |rescue_reference|
+          if rescue_reference.sexp_type == :const
+            rescue_reference[1]
+          end
+        end.compact
       end
 
       def set_multiple_rescue_classes

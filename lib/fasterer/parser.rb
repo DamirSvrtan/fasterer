@@ -1,10 +1,12 @@
+require 'ruby_parser'
+
 module Fasterer
   class Parser
 
-    PARSER_CLASS = Ripper
+    PARSER_CLASS = RubyParser
 
     def self.parse(ruby_code)
-      PARSER_CLASS.sexp(ruby_code)
+      PARSER_CLASS.new.parse(ruby_code)
     end
 
   end

@@ -43,13 +43,13 @@ module Fasterer
           scan_sexp_tree(method_call.receiver_element)
           scan_sexp_tree(method_call.arguments_element)
           scan_sexp_tree(method_call.block_body) if method_call.has_block?
-        when :massign
+        when :masgn
           scan_parallel_assignment(element)
           scan_sexp_tree(element)
         when :for
           scan_for_loop(element)
           scan_sexp_tree(element)
-        when :rescue
+        when :resbody
           scan_rescue(element)
           scan_sexp_tree(element)
         else
@@ -140,7 +140,7 @@ module Fasterer
 
     def scan_rescue(element)
       rescue_call = RescueCall.new(element)
-      if rescue_call.rescue_classes.include? 'NoMethodError'
+      if rescue_call.rescue_classes.include? :NoMethodError
         error_occurrence[:rescue_vs_respond_to] += 1
       end
     end
