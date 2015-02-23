@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/DamirSvrtan/fasterer.svg?branch=master)](https://travis-ci.org/DamirSvrtan/fasterer)
 # Fasterer
 
-Make your Rubies go faster with this command line tool inspired by [fast-ruby](https://speakerdeck.com/sferik/writing-fast-ruby) and [Sferik's talk at Baruco Conf](https://speakerdeck.com/sferik/writing-fast-ruby).
+Make your Rubies go faster with this command line tool highly inspired by [fast-ruby](https://github.com/JuanitoFatas/fast-ruby) and [Sferik's talk at Baruco Conf](https://speakerdeck.com/sferik/writing-fast-ruby).
 
 Fasterer will suggest some speed improvements which you can check in detail at the [fast-ruby repo](https://github.com/JuanitoFatas/fast-ruby).
 
