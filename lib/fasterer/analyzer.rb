@@ -85,7 +85,7 @@ module Fasterer
     def traverse_tree(sexp_tree, &block)
       sexp_tree.each do |element|
         next unless element.kind_of?(Array)
-        block.call(element)
+        yield element
         traverse_tree(element, &block)
       end
     end
