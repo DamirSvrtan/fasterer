@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/DamirSvrtan/fasterer.svg?branch=master)](https://travis-ci.org/DamirSvrtan/fasterer)
+
 # Fasterer
 
 TODO: Write a gem description
