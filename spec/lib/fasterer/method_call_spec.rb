@@ -174,13 +174,13 @@ describe Fasterer::MethodCall do
           code
         end
 
-        let(:call_element) { ripper.drop(1).first.last }
+        let(:call_element) { ripper }
 
         it 'should detect block' do
-          expect(method_call.method_name).to eq('fetch')
+          expect(method_call.method_name).to eq(:fetch)
           expect(method_call.arguments).to be_empty
           expect(method_call.has_block?).to be
-          expect(method_call.receiver).to be_a(Fasterer::VariableReference)
+          expect(method_call.receiver).to be_a(Fasterer::MethodCall)
         end
 
       end
@@ -197,10 +197,10 @@ describe Fasterer::MethodCall do
           code
         end
 
-        let(:call_element) { ripper.drop(1).first.last }
+        let(:call_element) { ripper[2] }
 
         it 'should detect block' do
-          expect(method_call.method_name).to eq('fetch')
+          expect(method_call.method_name).to eq(:fetch)
           expect(method_call.arguments.count).to be(1)
           expect(method_call.has_block?).to be
           expect(method_call.receiver).to be_a(Fasterer::VariableReference)
@@ -219,10 +219,10 @@ describe Fasterer::MethodCall do
           code
         end
 
-        let(:call_element) { ripper.drop(1).first.last }
+        let(:call_element) { ripper[2] }
 
         it 'should detect block' do
-          expect(method_call.method_name).to eq('fetch')
+          expect(method_call.method_name).to eq(:fetch)
           expect(method_call.arguments).to be_empty
           expect(method_call.has_block?).to be
           expect(method_call.receiver).to be_a(Fasterer::VariableReference)
@@ -242,10 +242,10 @@ describe Fasterer::MethodCall do
           code
         end
 
-        let(:call_element) { ripper.drop(1).first.last }
+        let(:call_element) { ripper[2] }
 
         it 'should detect block' do
-          expect(method_call.method_name).to eq('fetch')
+          expect(method_call.method_name).to eq(:fetch)
           expect(method_call.arguments).to be_empty
           expect(method_call.has_block?).to be
           expect(method_call.receiver).to be_a(Fasterer::VariableReference)
@@ -301,12 +301,12 @@ describe Fasterer::MethodCall do
       code
     end
 
-    let(:call_element) { ripper.drop(1).first.last }
+    let(:call_element) { ripper[2] }
 
     it 'should detect argument and a block' do
-      expect(method_call.method_name).to eq('fetch')
+      expect(method_call.method_name).to eq(:fetch)
       expect(method_call.arguments.count).to eq(1)
-      expect(method_call.arguments.first.type).to eq(:symbol_literal)
+      expect(method_call.arguments.first.type).to eq(:lit)
       expect(method_call.has_block?).to be
       expect(method_call.receiver).to be_a(Fasterer::VariableReference)
     end

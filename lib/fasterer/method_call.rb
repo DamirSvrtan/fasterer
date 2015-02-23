@@ -11,6 +11,7 @@ module Fasterer
 
     def initialize(element)
       @element = element
+      set_call_element
       set_receiver
       set_method_name
       set_arguments
@@ -23,21 +24,34 @@ module Fasterer
     end
 
     def receiver_element
-      element[1]
+      call_element[1]
     end
 
     def arguments_element
-      element[3..-1] || []
+      call_element[3..-1] || []
     end
 
     private
+
+      attr_reader :call_element
+      # TODO: explanation
+      def set_call_element
+        @call_element = case element.sexp_type
+                        when :call
+                          @element
+                        when :iter
+                          @element[1]
+                        else
+                          raise '!!!!!!!'
+                        end
+      end
 
       def set_receiver
         @receiver = ReceiverFactory.new(receiver_element)
       end
 
       def set_method_name
-        @method_name = element[2]
+        @method_name = call_element[2]
       end
 
       def set_arguments
@@ -45,7 +59,7 @@ module Fasterer
       end
 
       def set_block_presence
-        if token == :method_add_block
+        if element.sexp_type == :iter
           @block_present = true
         end
       end
