@@ -23,36 +23,11 @@ module Fasterer
     end
 
     def receiver_element
-      case token
-      when :method_add_block
-        if element[1][0] == :command
-          nil
-        elsif element[1][0] == :call
-          element[1][1]
-        else
-          element[1][1][1]
-        end
-      when :method_add_arg
-        element[1][1]
-      else # call or command_call
-        element[1]
-      end
+      element[1]
     end
 
     def arguments_element
-      case token
-      when :method_add_block
-        element[1][2][0] == :arg_paren ? element[1][2][1][1] : []
-        # element[1][2][1][1]
-      when :method_add_arg
-        (element[2][1].nil? ? [] : element[2][1][1]) || [] # need to fix this, if the first argument is a method without braces
-      when :command_call
-        element.last[1]
-      when :command
-        element[2][1]
-      else
-        []
-      end
+      element[3..-1] || []
     end
 
     private
@@ -62,24 +37,7 @@ module Fasterer
       end
 
       def set_method_name
-        @method_name =  case token
-                        when :method_add_arg
-                          element[1].last[1]
-                        when :method_add_block
-                          if element[1][0] == :command
-                            element[1][1][1]
-                          elsif element[1][0] == :call
-                            element[1].last[1]
-                          else
-                            element[1][1].last[1]
-                          end
-                        when :call
-                          element.last[1]
-                        when :command_call
-                          element[3][1]
-                        when :command
-                          element[1][1]
-                        end
+        @method_name = element[2]
       end
 
       def set_arguments
@@ -115,8 +73,8 @@ module Fasterer
       token = receiver_info.first
 
       case token
-      when :var_ref
-        return VariableReference.new(receiver_info[1])
+      when :lvar
+        return VariableReference.new(receiver_info)
       when :method_add_arg, :method_add_block
         case receiver_info[1][0]
         when :call, :fcall

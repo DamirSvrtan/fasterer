@@ -17,10 +17,10 @@ describe Fasterer::MethodCall do
         let(:code) { "User.hello()" }
 
         # This is where the :call token will be recognized.
-        let(:call_element) { ripper.drop(1).first.first[1] }
+        let(:call_element) { ripper }
 
         it 'should detect constant' do
-          expect(method_call.method_name).to eq('hello')
+          expect(method_call.method_name).to eq(:hello)
           expect(method_call.arguments).to be_empty
         end
 
@@ -31,10 +31,10 @@ describe Fasterer::MethodCall do
         let(:code) { '1.hello()' }
 
         # This is where the :call token will be recognized.
-        let(:call_element) { ripper.drop(1).first.first[1] }
+        let(:call_element) { ripper }
 
         it 'should detect integer' do
-          expect(method_call.method_name).to eq('hello')
+          expect(method_call.method_name).to eq(:hello)
           expect(method_call.arguments).to be_empty
         end
 
@@ -44,10 +44,10 @@ describe Fasterer::MethodCall do
 
         let(:code) { "'hello'.hello()" }
 
-        let(:call_element) { ripper.drop(1).first.first[1] }
+        let(:call_element) { ripper }
 
         it 'should detect string' do
-          expect(method_call.method_name).to eq('hello')
+          expect(method_call.method_name).to eq(:hello)
           expect(method_call.arguments).to be_empty
         end
 
@@ -60,12 +60,13 @@ describe Fasterer::MethodCall do
           "number_one.hello()"
         end
 
-        let(:call_element) { ripper.drop(1).first.last[1] }
+        let(:call_element) { ripper[2] }
 
         it 'should detect variable' do
-          expect(method_call.method_name).to eq('hello')
+          expect(method_call.method_name).to eq(:hello)
           expect(method_call.arguments).to be_empty
           expect(method_call.receiver).to be_a(Fasterer::VariableReference)
+          expect(method_call.receiver.name).to eq(:number_one)
         end
 
       end
@@ -74,12 +75,12 @@ describe Fasterer::MethodCall do
 
         let(:code) { '1.hi(2).hello()' }
 
-        let(:call_element) { ripper.drop(1).first.first[1] }
+        let(:call_element) { ripper }
 
         it 'should detect method' do
-          expect(method_call.method_name).to eq('hello')
+          expect(method_call.method_name).to eq(:hello)
           expect(method_call.receiver).to be_a(Fasterer::MethodCall)
-          expect(method_call.receiver.name).to eq('hi')
+          expect(method_call.receiver.name).to eq(:hi)
           expect(method_call.arguments).to be_empty
         end
 
@@ -91,11 +92,10 @@ describe Fasterer::MethodCall do
 
         let(:code) { "User.hello" }
 
-        # This is where the :call token will be recognized.
-        let(:call_element) { ripper.drop(1).first.first }
+        let(:call_element) { ripper }
 
         it 'should detect constant' do
-          expect(method_call.method_name).to eq('hello')
+          expect(method_call.method_name).to eq(:hello)
           expect(method_call.arguments).to be_empty
         end
 
@@ -106,10 +106,10 @@ describe Fasterer::MethodCall do
         let(:code) { '1.hello' }
 
         # This is where the :call token will be recognized.
-        let(:call_element) { ripper.drop(1).first.first }
+        let(:call_element) { ripper }
 
         it 'should detect integer' do
-          expect(method_call.method_name).to eq('hello')
+          expect(method_call.method_name).to eq(:hello)
           expect(method_call.arguments).to be_empty
         end
 
@@ -119,10 +119,10 @@ describe Fasterer::MethodCall do
 
         let(:code) { "'hello'.hello" }
 
-        let(:call_element) { ripper.drop(1).first.first }
+        let(:call_element) { ripper }
 
         it 'should detect string' do
-          expect(method_call.method_name).to eq('hello')
+          expect(method_call.method_name).to eq(:hello)
           expect(method_call.arguments).to be_empty
         end
 
@@ -135,12 +135,13 @@ describe Fasterer::MethodCall do
           "number_one.hello"
         end
 
-        let(:call_element) { ripper.drop(1).first.last }
+        let(:call_element) { ripper[2] }
 
         it 'should detect variable' do
-          expect(method_call.method_name).to eq('hello')
+          expect(method_call.method_name).to eq(:hello)
           expect(method_call.arguments).to be_empty
           expect(method_call.receiver).to be_a(Fasterer::VariableReference)
+          expect(method_call.receiver.name).to eq(:number_one)
         end
 
       end
@@ -149,12 +150,12 @@ describe Fasterer::MethodCall do
 
         let(:code) { '1.hi(2).hello' }
 
-        let(:call_element) { ripper.drop(1).first.first }
+        let(:call_element) { ripper }
 
         it 'should detect method' do
-          expect(method_call.method_name).to eq('hello')
+          expect(method_call.method_name).to eq(:hello)
           expect(method_call.receiver).to be_a(Fasterer::MethodCall)
-          expect(method_call.receiver.name).to eq('hi')
+          expect(method_call.receiver.name).to eq(:hi)
           expect(method_call.arguments).to be_empty
         end
 
@@ -166,7 +167,6 @@ describe Fasterer::MethodCall do
 
         let(:code) do
           <<-code
-            number_one = 1
             number_one.fetch do |el|
               number_two = 2
               number_three = 3
@@ -260,14 +260,12 @@ describe Fasterer::MethodCall do
 
         let(:code) { '{}.fetch(:writing)' }
 
-        let(:call_element) { ripper.drop(1).first.first }
+        let(:call_element) { ripper }
 
         it 'should detect argument' do
-          expect(method_call.method_name).to eq('fetch')
+          expect(method_call.method_name).to eq(:fetch)
           expect(method_call.arguments.count).to eq(1)
-          expect(method_call.arguments.first.type).to eq(:symbol_literal)
-          # expect(method_call.receiver).to be_a(Fasterer::MethodCall)
-          # expect(method_call.receiver.name).to eq('hi')
+          expect(method_call.arguments.first.type).to eq(:lit)
         end
 
       end
@@ -278,15 +276,13 @@ describe Fasterer::MethodCall do
 
         let(:code) { '{}.fetch :writing, :listening' }
 
-        let(:call_element) { ripper.drop(1).first.first }
+        let(:call_element) { ripper }
 
         it 'should detect argument' do
-          expect(method_call.method_name).to eq('fetch')
+          expect(method_call.method_name).to eq(:fetch)
           expect(method_call.arguments.count).to eq(2)
-          expect(method_call.arguments[0].type).to eq(:symbol_literal)
-          expect(method_call.arguments[1].type).to eq(:symbol_literal)
-          # expect(method_call.receiver).to be_a(Fasterer::MethodCall)
-          # expect(method_call.receiver.name).to eq('hi')
+          expect(method_call.arguments[0].type).to eq(:lit)
+          expect(method_call.arguments[1].type).to eq(:lit)
         end
 
       end
@@ -321,13 +317,13 @@ describe Fasterer::MethodCall do
 
     let(:code) { 'fetch(:writing, :listening)' }
 
-    let(:call_element) { ripper.drop(1).first.first }
+    let(:call_element) { ripper }
 
     it 'should detect two arguments' do
-      expect(method_call.method_name).to eq('fetch')
+      expect(method_call.method_name).to eq(:fetch)
       expect(method_call.arguments.count).to eq(2)
-      expect(method_call.arguments[0].type).to eq(:symbol_literal)
-      expect(method_call.arguments[1].type).to eq(:symbol_literal)
+      expect(method_call.arguments[0].type).to eq(:lit)
+      expect(method_call.arguments[1].type).to eq(:lit)
       expect(method_call.receiver).to be_nil
     end
 
@@ -337,13 +333,13 @@ describe Fasterer::MethodCall do
 
     let(:code) { 'fetch :writing, :listening' }
 
-    let(:call_element) { ripper.drop(1).first.first }
+    let(:call_element) { ripper }
 
     it 'should detect two arguments' do
-      expect(method_call.method_name).to eq('fetch')
+      expect(method_call.method_name).to eq(:fetch)
       expect(method_call.arguments.count).to eq(2)
-      expect(method_call.arguments[0].type).to eq(:symbol_literal)
-      expect(method_call.arguments[1].type).to eq(:symbol_literal)
+      expect(method_call.arguments[0].type).to eq(:lit)
+      expect(method_call.arguments[1].type).to eq(:lit)
       expect(method_call.receiver).to be_nil
     end
 
@@ -377,13 +373,13 @@ describe Fasterer::MethodCall do
       "number_one.fetch(:writing, :zumba)"
     end
 
-    let(:call_element) { ripper.drop(1).first.last }
+    let(:call_element) { ripper[2] }
 
     it 'should detect arguments' do
-      expect(method_call.method_name).to eq('fetch')
+      expect(method_call.method_name).to eq(:fetch)
       expect(method_call.arguments.count).to eq(2)
-      expect(method_call.arguments[0].type).to eq(:symbol_literal)
-      expect(method_call.arguments[1].type).to eq(:symbol_literal)
+      expect(method_call.arguments[0].type).to eq(:lit)
+      expect(method_call.arguments[1].type).to eq(:lit)
       expect(method_call.receiver).to be_a(Fasterer::VariableReference)
     end
 
@@ -393,12 +389,13 @@ describe Fasterer::MethodCall do
 
     let(:code) { '{}.fetch(/.*/)' }
 
-    let(:call_element) { ripper.drop(1).first.first }
+    let(:call_element) { ripper }
 
     it 'should detect regex argument' do
-      expect(method_call.method_name).to eq('fetch')
+      expect(method_call.method_name).to eq(:fetch)
       expect(method_call.arguments.count).to eq(1)
-      expect(method_call.arguments[0].type).to eq(:regexp_literal)
+      expect(method_call.arguments[0].type).to eq(:lit)
+      expect(method_call.arguments[0].value).to be_a(Regexp)
     end
 
   end
@@ -407,13 +404,13 @@ describe Fasterer::MethodCall do
 
     let(:code) { '[].flatten(1)' }
 
-    let(:call_element) { ripper.drop(1).first.first }
+    let(:call_element) { ripper }
 
     it 'should detect regex argument' do
-      expect(method_call.method_name).to eq('flatten')
+      expect(method_call.method_name).to eq(:flatten)
       expect(method_call.arguments.count).to eq(1)
-      expect(method_call.arguments[0].type).to eq(:@int)
-      expect(method_call.arguments[0].value).to eq("1")
+      expect(method_call.arguments[0].type).to eq(:lit)
+      expect(method_call.arguments[0].value).to eq(1)
     end
 
   end
