@@ -67,23 +67,23 @@ module Fasterer
       def check_first_offense
         return method_call unless method_call.receiver.is_a?(MethodCall)
 
-        case method_call.receiver.name
-        when :shuffle
-          self.offense = Fasterer::Offense.new(:shuffle_first_vs_sample, element.line)
-        when :select
-          self.offense = Fasterer::Offense.new(:select_first_vs_detect, element.line)
-        end
+        self.offense =  case method_call.receiver.name
+                        when :shuffle
+                          Fasterer::Offense.new(:shuffle_first_vs_sample, element.line)
+                        when :select
+                          Fasterer::Offense.new(:select_first_vs_detect, element.line)
+                        end
       end
 
       def check_each_offense
         return method_call unless method_call.receiver.is_a?(MethodCall)
 
-        case method_call.receiver.name
-        when :reverse
-          self.offense = Fasterer::Offense.new(:reverse_each_vs_reverse_each, element.line)
-        when :keys
-          self.offense = Fasterer::Offense.new(:keys_each_vs_each_key, element.line)
-        end
+        self.offense =  case method_call.receiver.name
+                        when :reverse
+                          Fasterer::Offense.new(:reverse_each_vs_reverse_each, element.line)
+                        when :keys
+                          Fasterer::Offense.new(:keys_each_vs_each_key, element.line)
+                        end
       end
 
       def check_flatten_offense
