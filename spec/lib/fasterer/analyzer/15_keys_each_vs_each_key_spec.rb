@@ -7,6 +7,6 @@ describe Fasterer::Analyzer do
   it 'should detect keys each 3 times' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
     analyzer.scan
-    expect(analyzer.error_occurrence[:keys_each_vs_each_key]).to eq(3)
+    expect(analyzer.errors[:keys_each_vs_each_key].count).to eq(3)
   end
 end

@@ -7,6 +7,6 @@ describe Fasterer::Analyzer do
   it 'should detect parallel assignment 2 times' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
     analyzer.scan
-    expect(analyzer.error_occurrence[:parallel_assignment]).to eq(2)
+    expect(analyzer.errors[:parallel_assignment].count).to eq(2)
   end
 end

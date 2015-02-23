@@ -1,10 +1,12 @@
-require 'ripper'
-require 'pry'
 require 'fasterer/method_definition'
 require 'fasterer/method_call'
 require 'fasterer/rescue_call'
+require 'fasterer/offense_collector'
 require 'fasterer/parser'
 require 'fasterer/parse_error'
+require 'fasterer/scanners/method_call_scanner'
+require 'fasterer/scanners/rescue_call_scanner'
+require 'fasterer/scanners/method_definition_scanner'
 
 module Fasterer
   class Analyzer
@@ -23,8 +25,8 @@ module Fasterer
       scan_sexp_tree(sexp_tree)
     end
 
-    def error_occurrence
-      @error_occurrence ||= Hash.new(0)
+    def errors
+      @errors ||= Fasterer::OffenseCollector.new
     end
 
     private
@@ -61,89 +63,37 @@ module Fasterer
     end
 
     def scan_method_definitions(element)
-      method_definition = MethodDefinition.new(element)
-      return unless method_definition.has_block?
+      method_definition_scanner = MethodDefinitionScanner.new(element)
 
-      # Detect block.call
-      traverse_tree(method_definition.body) do |element|
-        token = element.first
-        next unless token == :call
-
-        method_call = MethodCall.new(element)
-
-        if method_call.receiver.is_a?(Fasterer::VariableReference) &&
-          method_call.receiver.name == method_definition.block_argument_name &&
-          method_call.method_name == :call
-
-          error_occurrence[:proc_call_vs_yield] += 1
-          return
-        end
-      end
-
-    end
-
-    def traverse_tree(sexp_tree, &block)
-      sexp_tree.each do |element|
-        next unless element.kind_of?(Array)
-        yield element
-        traverse_tree(element, &block)
+      if method_definition_scanner.offense_detected?
+        errors.push(method_definition_scanner.offense)
       end
     end
 
     def scan_method_calls(element)
-      method_call = MethodCall.new(element)
+      method_call_scanner = MethodCallScanner.new(element)
 
-      case method_call.method_name
-      when :module_eval
-        error_occurrence[:module_eval] += 1
-      when :gsub
-        unless method_call.arguments.first.value.is_a? Regexp
-          error_occurrence[:gsub_vs_tr] += 1
-        end
-      when :sort
-        if method_call.arguments.count > 0 || method_call.has_block?
-          error_occurrence[:sort_vs_sort_by] += 1
-        end
-      when :each_with_index
-        error_occurrence[:each_with_index_vs_while] += 1
-      when :first
-        return method_call unless method_call.receiver.is_a?(MethodCall)
-        case method_call.receiver.name
-        when :shuffle
-          error_occurrence[:shuffle_first_vs_sample] += 1
-        when :select
-          error_occurrence[:select_first_vs_detect] += 1
-        end
-      when :each
-        return method_call unless method_call.receiver.is_a?(MethodCall)
-        case method_call.receiver.name
-        when :reverse
-          error_occurrence[:reverse_each_vs_reverse_each] += 1
-        when :keys
-          error_occurrence[:keys_each_vs_each_key] += 1
-        end
-      when :flatten
-        return method_call unless method_call.receiver.is_a?(MethodCall)
-        if method_call.receiver.name == :map && method_call.arguments.count == 1 && method_call.arguments.first.value == 1
-          error_occurrence[:map_flatten_vs_flat_map] += 1
-        end
+      if method_call_scanner.offense_detected?
+        errors.push(method_call_scanner.offense)
       end
 
-      method_call
+      # Need to check receiver, body and block.
+      return method_call_scanner.method_call
     end
 
     def scan_parallel_assignment(element)
-      error_occurrence[:parallel_assignment] += 1
+      errors.push(Fasterer::Offense.new(:parallel_assignment, element.line))
     end
 
     def scan_for_loop(element)
-      error_occurrence[:for_loop_vs_each] += 1
+      errors.push(Fasterer::Offense.new(:for_loop_vs_each, element.line))
     end
 
     def scan_rescue(element)
-      rescue_call = RescueCall.new(element)
-      if rescue_call.rescue_classes.include? :NoMethodError
-        error_occurrence[:rescue_vs_respond_to] += 1
+      rescue_call_scanner = RescueCallScanner.new(element)
+
+      if rescue_call_scanner.offense_detected?
+        errors.push(rescue_call_scanner.offense)
       end
     end
 

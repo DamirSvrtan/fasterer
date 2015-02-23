@@ -43,8 +43,8 @@ module Fasterer
 
       def output(analyzer)
         puts analyzer.file_path.colorize(:red)
-        analyzer.error_occurrence.each do |error_name, occurences|
-          puts "#{error_name}: #{occurences}"
+        analyzer.errors.each do |error|
+          puts "#{error.name}: #{error.line_number}"
         end
         puts
       end

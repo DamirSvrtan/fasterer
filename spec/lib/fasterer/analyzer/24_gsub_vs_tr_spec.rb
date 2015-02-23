@@ -7,6 +7,6 @@ describe Fasterer::Analyzer do
   it 'should detect gsub 4 times' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
     analyzer.scan
-    expect(analyzer.error_occurrence[:gsub_vs_tr]).to eq(4)
+    expect(analyzer.errors[:gsub_vs_tr].count).to eq(4)
   end
 end

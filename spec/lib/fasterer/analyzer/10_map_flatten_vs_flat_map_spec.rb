@@ -7,6 +7,6 @@ describe Fasterer::Analyzer do
   it 'should detect a map{}.flatten(1) ' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
     analyzer.scan
-    expect(analyzer.error_occurrence[:map_flatten_vs_flat_map]).to eq(2)
+    expect(analyzer.errors[:map_flatten_vs_flat_map].count).to eq(2)
   end
 end

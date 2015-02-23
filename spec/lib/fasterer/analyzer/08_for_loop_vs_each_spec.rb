@@ -7,6 +7,6 @@ describe Fasterer::Analyzer do
   it 'should detect a for loop' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
     analyzer.scan
-    expect(analyzer.error_occurrence[:for_loop_vs_each]).to eq(1)
+    expect(analyzer.errors[:for_loop_vs_each].count).to eq(1)
   end
 end

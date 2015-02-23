@@ -7,6 +7,6 @@ describe Fasterer::Analyzer do
   it 'should detect rescue NoMethodError' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
     analyzer.scan
-    expect(analyzer.error_occurrence[:rescue_vs_respond_to]).to eq(3)
+    expect(analyzer.errors[:rescue_vs_respond_to].count).to eq(3)
   end
 end

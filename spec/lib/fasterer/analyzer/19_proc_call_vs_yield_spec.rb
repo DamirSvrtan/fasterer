@@ -7,6 +7,6 @@ describe Fasterer::Analyzer do
   it 'should detect sort once' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
     analyzer.scan
-    expect(analyzer.error_occurrence[:proc_call_vs_yield]).to eq(3)
+    expect(analyzer.errors[:proc_call_vs_yield].count).to eq(3)
   end
 end

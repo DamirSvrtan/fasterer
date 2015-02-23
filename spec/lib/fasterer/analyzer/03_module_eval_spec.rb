@@ -7,6 +7,6 @@ describe Fasterer::Analyzer do
   it 'should detect module eval' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
     analyzer.scan
-    expect(analyzer.error_occurrence[:module_eval]).to eq(1)
+    expect(analyzer.errors[:module_eval].count).to eq(1)
   end
 end
