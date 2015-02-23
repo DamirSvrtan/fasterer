@@ -3,6 +3,7 @@ require 'pry'
 require 'fasterer/method_definition'
 require 'fasterer/method_call'
 require 'fasterer/rescue_call'
+require 'fasterer/parser'
 require 'fasterer/parse_error'
 
 module Fasterer
@@ -17,7 +18,7 @@ module Fasterer
     end
 
     def scan
-      sexp_tree = Ripper.sexp(@file_content)
+      sexp_tree = Fasterer::Parser.parse(@file_content)
       raise ParseError.new(file_path) if sexp_tree.nil?
       scan_sexp_tree(sexp_tree)
     end

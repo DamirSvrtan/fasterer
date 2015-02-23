@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Fasterer::MethodDefinition do
 
   let(:def_element) do
-    ripper = Ripper.sexp(File.read(RSpec.root.join('support', 'method_definition', file_name)))
+    ripper = Fasterer::Parser.parse(File.read(RSpec.root.join('support', 'method_definition', file_name)))
     ripper.last.first
   end
 
@@ -95,7 +95,7 @@ describe Fasterer::MethodDefinition do
 
 
   # let(:def_element_with_block) do
-  #   ripper = Ripper.sexp(File.read(RSpec.root.join('support', 'method_definition', 'method_with_block.rb')))
+  #   ripper = Fasterer::Parser.parse(File.read(RSpec.root.join('support', 'method_definition', 'method_with_block.rb')))
   #   ripper.last.first
   # end
 
@@ -106,7 +106,7 @@ describe Fasterer::MethodDefinition do
   # end
 
   # let(:def_element_with_default_argument) do
-  #   ripper = Ripper.sexp(File.read(RSpec.root.join('support', 'method_definition', 'method_with_default_argument.rb')))
+  #   ripper = Fasterer::Parser.parse(File.read(RSpec.root.join('support', 'method_definition', 'method_with_default_argument.rb')))
   #   ripper.last.first
   # end
 
@@ -118,7 +118,7 @@ describe Fasterer::MethodDefinition do
   # end
 
   # let(:def_element_with_splat) do
-  #   ripper = Ripper.sexp(File.read(RSpec.root.join('support', 'method_definition', 'method_with_splat.rb')))
+  #   ripper = Fasterer::Parser.parse(File.read(RSpec.root.join('support', 'method_definition', 'method_with_splat.rb')))
   #   ripper.last.first
   # end
 

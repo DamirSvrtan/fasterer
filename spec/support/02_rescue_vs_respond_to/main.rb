@@ -29,7 +29,7 @@ rescue
 end
 
 begin
-
+  'abakus'.to_a
 rescue StandardError
 
 end

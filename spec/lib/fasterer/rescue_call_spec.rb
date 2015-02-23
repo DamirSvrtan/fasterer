@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Fasterer::RescueCall do
 
   let(:rescue_element) do
-    ripper = Ripper.sexp(File.read(RSpec.root.join('support', 'rescue_call', file_name)))
+    ripper = Fasterer::Parser.parse(File.read(RSpec.root.join('support', 'rescue_call', file_name)))
     ripper.drop(1).first.first[1][2]
   end
 

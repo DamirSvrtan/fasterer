@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Fasterer::MethodCall do
 
   let(:ripper) do
-    Ripper.sexp(code)
+    Fasterer::Parser.parse(code)
   end
 
   let(:method_call) do
