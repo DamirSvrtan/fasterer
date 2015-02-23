@@ -31,7 +31,7 @@ module Fasterer
         rescue Fasterer::ParseError => error
           parse_error_paths.push(error.file_path)
         else
-          output(analyzer) if analyzer.error_occurrence.any?
+          output(analyzer) if analyzer.errors.any?
         end
       end
 
