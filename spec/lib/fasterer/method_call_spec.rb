@@ -14,7 +14,7 @@ describe Fasterer::MethodCall do
     describe 'without arguments, without block, called with parentheses' do
       describe 'method call on a constant' do
 
-        let(:code) { "User.hello()" }
+        let(:code) { 'User.hello()' }
 
         # This is where the :call token will be recognized.
         let(:call_element) { ripper }
@@ -57,7 +57,7 @@ describe Fasterer::MethodCall do
 
         let(:code) do
           "number_one = 1\n"\
-          "number_one.hello()"
+          'number_one.hello()'
         end
 
         let(:call_element) { ripper[2] }
@@ -90,7 +90,7 @@ describe Fasterer::MethodCall do
     describe 'without arguments, without block, called without parentheses' do
       describe 'method call on a constant' do
 
-        let(:code) { "User.hello" }
+        let(:code) { 'User.hello' }
 
         let(:call_element) { ripper }
 
@@ -132,7 +132,7 @@ describe Fasterer::MethodCall do
 
         let(:code) do
           "number_one = 1\n"\
-          "number_one.hello"
+          'number_one.hello'
         end
 
         let(:call_element) { ripper[2] }
@@ -421,7 +421,7 @@ describe Fasterer::MethodCall do
 
     let(:code) do
       "number_one = 1\n"\
-      "number_one.fetch(:writing, :zumba)"
+      'number_one.fetch(:writing, :zumba)'
     end
 
     let(:call_element) { ripper[2] }
@@ -479,6 +479,5 @@ describe Fasterer::MethodCall do
     end
 
   end
-
 
 end

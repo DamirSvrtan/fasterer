@@ -13,6 +13,5 @@ module Fasterer
     end
 
     def_delegators :@offenses, :push, :any?, :each
-
   end
 end

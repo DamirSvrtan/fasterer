@@ -10,7 +10,6 @@ require 'fasterer/scanners/method_definition_scanner'
 
 module Fasterer
   class Analyzer
-
     attr_reader :file_path
     alias_method :path, :file_path
 
@@ -21,7 +20,7 @@ module Fasterer
 
     def scan
       sexp_tree = Fasterer::Parser.parse(@file_content)
-      raise ParseError.new(file_path) if sexp_tree.nil?
+      fail ParseError.new(file_path) if sexp_tree.nil?
       scan_sexp_tree(sexp_tree)
     end
 
@@ -32,10 +31,10 @@ module Fasterer
     private
 
     def scan_sexp_tree(sexp_tree)
-      return unless sexp_tree.kind_of?(Sexp)
+      return unless sexp_tree.is_a?(Sexp)
 
       sexp_tree.each do |element|
-        next unless element.kind_of?(Sexp)
+        next unless element.is_a?(Sexp)
         token = element.first
 
         case token
@@ -78,7 +77,7 @@ module Fasterer
       end
 
       # Need to check receiver, body and block.
-      return method_call_scanner.method_call
+      method_call_scanner.method_call
     end
 
     def scan_parallel_assignment(element)
@@ -96,6 +95,5 @@ module Fasterer
         errors.push(rescue_call_scanner.offense)
       end
     end
-
   end
 end

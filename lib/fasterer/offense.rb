@@ -1,6 +1,5 @@
 module Fasterer
   class Offense
-
     attr_reader :offense_name, :line_number
 
     alias_method :name, :offense_name
@@ -10,6 +9,5 @@ module Fasterer
       @offense_name = offense_name
       @line_number  = line_number
     end
-
   end
 end

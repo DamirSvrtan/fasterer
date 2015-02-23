@@ -5,7 +5,6 @@ require_relative 'analyzer'
 
 module Fasterer
   class FileTraverser
-
     def initialize(path)
       @path = Pathname(path)
       @parse_error_paths = []
@@ -22,40 +21,38 @@ module Fasterer
 
     private
 
-      attr_reader :parse_error_paths
+    attr_reader :parse_error_paths
 
-      def scan_file(path)
-        begin
-          analyzer = Analyzer.new(path)
-          analyzer.scan
-        rescue Fasterer::ParseError, RubyParser::SyntaxError, Racc::ParseError => error
-          parse_error_paths.push(path)
-        else
-          output(analyzer) if analyzer.errors.any?
-        end
-      end
+    def scan_file(path)
+      analyzer = Analyzer.new(path)
+      analyzer.scan
+    rescue Fasterer::ParseError, RubyParser::SyntaxError, Racc::ParseError
+      parse_error_paths.push(path)
+    else
+      output(analyzer) if analyzer.errors.any?
+    end
 
-      def traverse_directory(path)
-        Dir["#{path}/**/*.rb"].each do |ruby_file|
-          scan_file(ruby_file.split('/').drop(1).join('/'))
-        end
+    def traverse_directory(path)
+      Dir["#{path}/**/*.rb"].each do |ruby_file|
+        scan_file(ruby_file.split('/').drop(1).join('/'))
       end
+    end
 
-      def output(analyzer)
-        puts analyzer.file_path.colorize(:red)
-        analyzer.errors.each do |error|
-          puts "#{error.name} occured at line #{error.line_number}."
-        end
-        puts
+    def output(analyzer)
+      puts analyzer.file_path.colorize(:red)
+      analyzer.errors.each do |error|
+        puts "#{error.name} occured at line #{error.line_number}."
       end
+      puts
+    end
 
-      def output_parse_errors
-        puts "Fasterer was unable to process some files because the"
-        puts "internal parser is not able to read some characters."
-        puts "Unprocessable files were:"
-        puts "-----------------------------------------------------"
-        puts parse_error_paths
-        puts
-      end
+    def output_parse_errors
+      puts 'Fasterer was unable to process some files because the'
+      puts 'internal parser is not able to read some characters.'
+      puts 'Unprocessable files were:'
+      puts '-----------------------------------------------------'
+      puts parse_error_paths
+      puts
+    end
   end
 end

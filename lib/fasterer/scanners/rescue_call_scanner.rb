@@ -22,15 +22,14 @@ module Fasterer
 
     private
 
-      def check_offense
-        if rescue_call.rescue_classes.include? :NoMethodError
-          add_offense(:rescue_vs_respond_to)
-        end
+    def check_offense
+      if rescue_call.rescue_classes.include? :NoMethodError
+        add_offense(:rescue_vs_respond_to)
       end
+    end
 
-      def rescue_call
-        @rescue_call ||= RescueCall.new(element)
-      end
-
+    def rescue_call
+      @rescue_call ||= RescueCall.new(element)
+    end
   end
 end

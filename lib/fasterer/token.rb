@@ -1,6 +1,5 @@
 module Fasterer
   class Token
-
     def initialize(name)
       @name = name
     end
@@ -24,6 +23,5 @@ module Fasterer
     def for_loop?
       name == :for
     end
-
   end
 end

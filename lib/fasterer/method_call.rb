@@ -1,6 +1,5 @@
 module Fasterer
   class MethodCall
-
     attr_reader :element
     attr_reader :receiver
     attr_reader :method_name
@@ -35,53 +34,52 @@ module Fasterer
 
     private
 
-      attr_reader :call_element
-      # TODO: explanation
-      def set_call_element
-        @call_element = case element.sexp_type
-                        when :call
-                          @element
-                        when :iter
-                          @element[1]
-                        else
-                          raise '!!!!!!!'
-                        end
-      end
+    attr_reader :call_element
+    # TODO: explanation
+    def set_call_element
+      @call_element = case element.sexp_type
+                      when :call
+                        @element
+                      when :iter
+                        @element[1]
+                      else
+                        fail '!!!!!!!'
+                      end
+    end
 
-      def set_receiver
-        @receiver = ReceiverFactory.new(receiver_element)
-      end
+    def set_receiver
+      @receiver = ReceiverFactory.new(receiver_element)
+    end
 
-      def set_method_name
-        @method_name = call_element[2]
-      end
+    def set_method_name
+      @method_name = call_element[2]
+    end
 
-      def set_arguments
-        @arguments = arguments_element.map { |argument| Argument.new(argument) }
-      end
+    def set_arguments
+      @arguments = arguments_element.map { |argument| Argument.new(argument) }
+    end
 
-      def set_block_presence
-        if element.sexp_type == :iter
-          @block_present = true
-        end
+    def set_block_presence
+      if element.sexp_type == :iter
+        @block_present = true
       end
+    end
 
-      def set_block_body
-        if token == :method_add_block
-          @block_body = element[2][2]
-        end
+    def set_block_body
+      if token == :method_add_block
+        @block_body = element[2][2]
       end
+    end
 
-      def set_block_argument_names
-        if has_block?
-          @block_argument_names = element[2].drop(1).map {|argument| argument }
-        end
-      end
+    def set_block_argument_names
+      return unless has_block?
 
-      def token
-        element[0]
-      end
+      @block_argument_names = element[2].drop(1).map { |argument| argument }
+    end
 
+    def token
+      element[0]
+    end
   end
 
   # For now, used for determening if
@@ -133,5 +131,4 @@ module Fasterer
       @value ||= @element[1]
     end
   end
-
 end

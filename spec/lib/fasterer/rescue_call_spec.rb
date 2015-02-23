@@ -2,8 +2,10 @@ require 'spec_helper'
 
 describe Fasterer::RescueCall do
 
+  let(:file_path) { RSpec.root.join('support', 'rescue_call', file_name) }
+
   let(:rescue_element) do
-    sexpd_file = Fasterer::Parser.parse(File.read(RSpec.root.join('support', 'rescue_call', file_name)))
+    sexpd_file = Fasterer::Parser.parse(File.read(file_path))
     sexpd_file[2]
   end
 

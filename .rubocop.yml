@@ -4,3 +4,5 @@ AllCops:
   Exclude:
     - 'spec/support/**/*'
     - 'spec/spec_helper.rb'
+Documentation:
+    Enabled: false

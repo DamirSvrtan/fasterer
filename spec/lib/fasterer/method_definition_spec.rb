@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Fasterer::MethodDefinition do
 
   let(:def_element) do
-    ripper = Fasterer::Parser.parse(File.read(RSpec.root.join('support', 'method_definition', file_name)))
+    Fasterer::Parser.parse(File.read(RSpec.root.join('support', 'method_definition', file_name)))
   end
 
   let(:method_definition) do
