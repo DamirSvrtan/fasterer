@@ -66,15 +66,15 @@ module Fasterer
     end
 
     def set_block_body
-      if token == :method_add_block
-        @block_body = element[2][2]
+      if has_block?
+        @block_body = element[3]
       end
     end
 
     def set_block_argument_names
-      return unless has_block?
-
-      @block_argument_names = element[2].drop(1).map { |argument| argument }
+      @block_argument_names = if has_block?
+        element[2].drop(1).map { |argument| argument }
+      end || []
     end
 
     def token

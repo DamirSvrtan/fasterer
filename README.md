@@ -30,7 +30,6 @@ fasterer
 7. Enumerable#each + push vs Enumerable#map
 16. Hash#merge! vs Hash#[]=
 17. Hash#merge vs Hash#merge!
-18. Block vs Symbol#to_proc
 20. String#casecmp vs String#downcase + ==
 21. String concatenation
 22. String#match vs String#start_with?/String#end_with?
