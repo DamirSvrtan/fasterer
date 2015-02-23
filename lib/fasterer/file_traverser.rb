@@ -28,8 +28,8 @@ module Fasterer
         begin
           analyzer = Analyzer.new(path)
           analyzer.scan
-        rescue Fasterer::ParseError => error
-          parse_error_paths.push(error.file_path)
+        rescue Fasterer::ParseError, RubyParser::SyntaxError, Racc::ParseError => error
+          parse_error_paths.push(path)
         else
           output(analyzer) if analyzer.errors.any?
         end
@@ -44,7 +44,7 @@ module Fasterer
       def output(analyzer)
         puts analyzer.file_path.colorize(:red)
         analyzer.errors.each do |error|
-          puts "#{error.name}: #{error.line_number}"
+          puts "#{error.name} occured at line #{error.line_number}."
         end
         puts
       end
