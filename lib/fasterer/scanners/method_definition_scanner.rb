@@ -22,12 +22,14 @@ module Fasterer
     private
 
       def check_offense
-        return unless method_definition.has_block?
+        if method_definition.has_block?
+          scan_block_call_offense
+        end
+      end
 
-        # Detect block.call
+      def scan_block_call_offense
         traverse_tree(method_definition.body) do |element|
-          token = element.first
-          next unless token == :call
+          next unless element.sexp_type == :call
 
           method_call = MethodCall.new(element)
 
