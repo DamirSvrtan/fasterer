@@ -163,7 +163,31 @@ describe Fasterer::MethodCall do
     end
 
     describe 'with do end block' do
-      describe 'and no arguments' do
+
+      describe 'and no arguments, without block parameter' do
+
+        let(:code) do
+          <<-code
+            number_one.fetch do
+              number_two = 2
+              number_three = 3
+            end
+          code
+        end
+
+        let(:call_element) { ripper }
+
+        it 'should detect block' do
+          expect(method_call.method_name).to eq(:fetch)
+          expect(method_call.arguments).to be_empty
+          expect(method_call.has_block?).to be
+          expect(method_call.block_argument_names.count).to be(0)
+          expect(method_call.receiver).to be_a(Fasterer::MethodCall)
+        end
+
+      end
+
+      describe 'and no arguments, with block parameter' do
 
         let(:code) do
           <<-code
@@ -180,6 +204,33 @@ describe Fasterer::MethodCall do
           expect(method_call.method_name).to eq(:fetch)
           expect(method_call.arguments).to be_empty
           expect(method_call.has_block?).to be
+          expect(method_call.block_argument_names.count).to be(1)
+          expect(method_call.block_argument_names.first).to be(:el)
+          expect(method_call.receiver).to be_a(Fasterer::MethodCall)
+        end
+
+      end
+
+      describe 'and no arguments, with block parameter' do
+
+        let(:code) do
+          <<-code
+            number_one.fetch do |el, tip|
+              number_two = 2
+              number_three = 3
+            end
+          code
+        end
+
+        let(:call_element) { ripper }
+
+        it 'should detect block' do
+          expect(method_call.method_name).to eq(:fetch)
+          expect(method_call.arguments).to be_empty
+          expect(method_call.has_block?).to be
+          expect(method_call.block_argument_names.count).to be(2)
+          expect(method_call.block_argument_names.first).to be(:el)
+          expect(method_call.block_argument_names.last).to be(:tip)
           expect(method_call.receiver).to be_a(Fasterer::MethodCall)
         end
 

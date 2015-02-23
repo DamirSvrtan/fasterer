@@ -6,6 +6,7 @@ module Fasterer
     attr_reader :method_name
     attr_reader :arguments
     attr_reader :block_body
+    attr_reader :block_argument_names
 
     alias_method :name, :method_name
 
@@ -17,6 +18,7 @@ module Fasterer
       set_arguments
       set_block_presence
       set_block_body
+      set_block_argument_names
     end
 
     def has_block?
@@ -67,6 +69,12 @@ module Fasterer
       def set_block_body
         if token == :method_add_block
           @block_body = element[2][2]
+        end
+      end
+
+      def set_block_argument_names
+        if has_block?
+          @block_argument_names = element[2].drop(1).map {|argument| argument }
         end
       end
 
