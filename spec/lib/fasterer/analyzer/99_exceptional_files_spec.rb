@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Fasterer::Analyzer do
 
-  let(:test_file_path) { RSpec.root.join('support', '99_exceptional_files', 'main.rb') }
+  let(:test_file_path) { RSpec.root.join('support', 'analyzer', '99_exceptional_files.rb') }
 
   it 'diacritics should not raise an error' do
     analyzer = Fasterer::Analyzer.new(test_file_path)

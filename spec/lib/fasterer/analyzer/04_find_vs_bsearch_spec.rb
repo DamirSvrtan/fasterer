@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Fasterer::Analyzer do
 
-  let(:test_file_path) { RSpec.root.join('support', '04_find_vs_bsearch', 'main.rb') }
+  let(:test_file_path) { RSpec.root.join('support', 'analyzer', '04_find_vs_bsearch.rb') }
 
   xit 'should detect Array#find' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
