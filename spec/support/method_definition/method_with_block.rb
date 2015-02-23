@@ -1,3 +1,3 @@
 def hello(&block)
-  &block.call
+  block.call
 end

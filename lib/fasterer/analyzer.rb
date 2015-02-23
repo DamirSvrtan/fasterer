@@ -35,12 +35,12 @@ module Fasterer
         token = element.first
 
         case token
-        when :def
+        when :defn
           scan_method_definitions(element)
           scan_sexp_tree(element)
         when :call, :method_add_block, :method_add_arg, :command_call, :command
           method_call = scan_method_calls(element)
-          scan_sexp_tree(method_call.receiver_element)
+          scan_sexp_tree(method_call.receiver_element) unless method_call.receiver_element.nil?
           scan_sexp_tree(method_call.arguments_element)
           scan_sexp_tree(method_call.block_body) if method_call.has_block?
         when :masgn
@@ -92,37 +92,37 @@ module Fasterer
       method_call = MethodCall.new(element)
 
       case method_call.method_name
-      when 'module_eval'
+      when :module_eval
         error_occurrence[:module_eval] += 1
-      when 'gsub'
+      when :gsub
         unless method_call.arguments.first.type == :regexp_literal
           error_occurrence[:gsub_vs_tr] += 1
         end
-      when 'sort'
+      when :sort
         if method_call.arguments.count > 0 || method_call.has_block?
           error_occurrence[:sort_vs_sort_by] += 1
         end
-      when 'each_with_index'
+      when :each_with_index
         error_occurrence[:each_with_index_vs_while] += 1
-      when 'first'
+      when :first
         return method_call unless method_call.receiver.is_a?(MethodCall)
         case method_call.receiver.name
-        when 'shuffle'
+        when :shuffle
           error_occurrence[:shuffle_first_vs_sample] += 1
-        when 'select'
+        when :select
           error_occurrence[:select_first_vs_detect] += 1
         end
-      when 'each'
+      when :each
         return method_call unless method_call.receiver.is_a?(MethodCall)
         case method_call.receiver.name
-        when 'reverse'
+        when :reverse
           error_occurrence[:reverse_each_vs_reverse_each] += 1
-        when 'keys'
+        when :keys
           error_occurrence[:keys_each_vs_each_key] += 1
         end
-      when 'flatten'
+      when :flatten
         return method_call unless method_call.receiver.is_a?(MethodCall)
-        if method_call.receiver.name == 'map' && method_call.arguments.count == 1 && method_call.arguments.first.value == "1"
+        if method_call.receiver.name == :map && method_call.arguments.count == 1 && method_call.arguments.first.value == "1"
           error_occurrence[:map_flatten_vs_flat_map] += 1
         end
       end
