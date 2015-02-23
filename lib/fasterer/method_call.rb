@@ -97,7 +97,7 @@ module Fasterer
           # binding.pry watch out for :method_add_arg
           # raise 'nije ni metoda'
         end
-      when :call
+      when :call, :iter
         return MethodCall.new(receiver_info)
       end
     end

@@ -38,7 +38,7 @@ module Fasterer
         when :defn
           scan_method_definitions(element)
           scan_sexp_tree(element)
-        when :call, :method_add_block, :method_add_arg, :command_call, :command
+        when :call
           method_call = scan_method_calls(element)
           scan_sexp_tree(method_call.receiver_element) unless method_call.receiver_element.nil?
           scan_sexp_tree(method_call.arguments_element)
@@ -122,7 +122,7 @@ module Fasterer
         end
       when :flatten
         return method_call unless method_call.receiver.is_a?(MethodCall)
-        if method_call.receiver.name == :map && method_call.arguments.count == 1 && method_call.arguments.first.value == "1"
+        if method_call.receiver.name == :map && method_call.arguments.count == 1 && method_call.arguments.first.value == 1
           error_occurrence[:map_flatten_vs_flat_map] += 1
         end
       end
