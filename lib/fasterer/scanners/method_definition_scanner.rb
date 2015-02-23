@@ -8,18 +8,11 @@ module Fasterer
     include Fasterer::Offensive
 
     attr_reader :element
-    attr_accessor :offense
 
     def initialize(element)
       @element = element
       check_offense
     end
-
-    def offensive?
-      !!offense
-    end
-
-    alias_method :offense_detected?, :offensive?
 
     private
 
