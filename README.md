@@ -6,7 +6,7 @@ Make your Rubies go faster with this command line tool inspired by [fast-ruby](h
 
 Fasterer will suggest some speed improvements which you can check in detail at the [fast-ruby repo](https://github.com/JuanitoFatas/fast-ruby).
 
-Please note that you shouldn't follow the suggestions blindly. Using a while loop instead of a each_with_index shouldn't be considered if you're doing a regular Rails project, but maybe if you're doing something very speed dependent such as Rake you might consider this speed increase.
+**Please note** that you shouldn't follow the suggestions blindly. Using a while loop instead of a each_with_index shouldn't be considered if you're doing a regular Rails project, but maybe if you're doing something very speed dependent such as Rake you might consider this speed increase.
 
 
 
