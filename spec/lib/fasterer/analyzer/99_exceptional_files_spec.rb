@@ -4,8 +4,8 @@ describe Fasterer::Analyzer do
 
   let(:test_file_path) { RSpec.root.join('support', '99_exceptional_files', 'main.rb') }
 
-  it 'should detect gsub 4 times' do
+  it 'diacritics should not raise an error' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
-    expect { analyzer.scan }.to raise_error(Fasterer::ParseError)
+    expect { analyzer.scan }.not_to raise_error
   end
 end

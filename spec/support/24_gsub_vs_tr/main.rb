@@ -5,7 +5,7 @@ petar = 'petar'
 petar.gsub('r', 'k')
 petar.gsub(/abba/, 'k')
 
-petar.gsub(/*a\ab\//, 'k')
+petar.gsub(/aab\//, 'k')
 
 class Hello
   def hihi

@@ -30,15 +30,17 @@ module Fasterer
     private
 
     def scan_sexp_tree(sexp_tree)
+      return unless sexp_tree.kind_of?(Sexp)
+
       sexp_tree.each do |element|
-        next unless element.kind_of?(Array)
+        next unless element.kind_of?(Sexp)
         token = element.first
 
         case token
         when :defn
           scan_method_definitions(element)
           scan_sexp_tree(element)
-        when :call
+        when :call, :iter
           method_call = scan_method_calls(element)
           scan_sexp_tree(method_call.receiver_element) unless method_call.receiver_element.nil?
           scan_sexp_tree(method_call.arguments_element)
@@ -95,7 +97,7 @@ module Fasterer
       when :module_eval
         error_occurrence[:module_eval] += 1
       when :gsub
-        unless method_call.arguments.first.type == :regexp_literal
+        unless method_call.arguments.first.value.is_a? Regexp
           error_occurrence[:gsub_vs_tr] += 1
         end
       when :sort
