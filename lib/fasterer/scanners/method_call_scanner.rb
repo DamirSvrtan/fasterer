@@ -39,6 +39,8 @@ module Fasterer
           check_each_offense
         when :flatten
           check_flatten_offense
+        when :fetch
+          check_fetch_offense
         end
       end
 
@@ -92,6 +94,12 @@ module Fasterer
            method_call.arguments.first.value == 1
 
           self.offense = Fasterer::Offense.new(:map_flatten_vs_flat_map, element.line)
+        end
+      end
+
+      def check_fetch_offense
+        if method_call.arguments.count == 2 && !method_call.has_block?
+          self.offense = Fasterer::Offense.new(:fetch_with_argument_vs_block, element.line)
         end
       end
 

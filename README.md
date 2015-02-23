@@ -28,7 +28,6 @@ fasterer
 4. find vs bsearch
 5. Array#count vs Array#size
 7. Enumerable#each + push vs Enumerable#map
-14. Hash#fetch with argument vs Hash#fetch + block
 16. Hash#merge! vs Hash#[]=
 17. Hash#merge vs Hash#merge!
 18. Block vs Symbol#to_proc
