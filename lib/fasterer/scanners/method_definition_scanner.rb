@@ -1,9 +1,11 @@
 require 'fasterer/method_definition'
 require 'fasterer/method_call'
 require 'fasterer/offense'
+require 'fasterer/scanners/offensive'
 
 module Fasterer
   class MethodDefinitionScanner
+    include Fasterer::Offensive
 
     attr_reader :element
     attr_accessor :offense
@@ -37,8 +39,7 @@ module Fasterer
             method_call.receiver.name == method_definition.block_argument_name &&
             method_call.method_name == :call
 
-            self.offense = Fasterer::Offense.new(:proc_call_vs_yield, element.line)
-            return
+            add_offense(:proc_call_vs_yield) && return
           end
         end
       end

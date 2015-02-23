@@ -1,8 +1,10 @@
 require 'fasterer/rescue_call'
 require 'fasterer/offense'
+require 'fasterer/scanners/offensive'
 
 module Fasterer
   class RescueCallScanner
+    include Fasterer::Offensive
 
     attr_reader :element
     attr_accessor :offense
@@ -22,7 +24,7 @@ module Fasterer
 
       def check_offense
         if rescue_call.rescue_classes.include? :NoMethodError
-          self.offense = Fasterer::Offense.new(:rescue_vs_respond_to, element.line)
+          add_offense(:rescue_vs_respond_to)
         end
       end
 
