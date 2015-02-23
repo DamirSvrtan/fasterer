@@ -5,7 +5,7 @@ Make your Rubies go faster with this command line tool inspired by [fast-ruby](h
 
 Fasterer will suggest some speed improvements which you can check in detail at the [fast-ruby repo](https://github.com/JuanitoFatas/fast-ruby).
 
-**Please note** that you shouldn't follow the suggestions blindly. Using a while loop instead of a each_with_index shouldn't be considered if you're doing a regular Rails project, but maybe if you're doing something very speed dependent such as Rake you might consider this speed increase.
+**Please note** that you shouldn't follow the suggestions blindly. Using a while loop instead of a each_with_index shouldn't be considered if you're doing a regular Rails project, but maybe if you're doing something very speed dependent such as Rack you might consider this speed increase.
 
 
 
@@ -44,7 +44,7 @@ class_eval
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/fasterer/fork )
+1. Fork it ( https://github.com/DamirSvrtan/fasterer/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
