@@ -73,7 +73,7 @@ module Fasterer
 
         if method_call.receiver.is_a?(Fasterer::VariableReference) &&
           method_call.receiver.name == method_definition.block_argument_name &&
-          method_call.method_name == 'call'
+          method_call.method_name == :call
 
           error_occurrence[:proc_call_vs_yield] += 1
           return

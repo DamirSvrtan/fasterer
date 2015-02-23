@@ -36,7 +36,7 @@ module Fasterer
       end
 
       def set_body
-        @body = @element[3]
+        @body = @element[3..-1]
       end
 
       def set_block_argument_name
