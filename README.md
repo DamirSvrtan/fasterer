@@ -2,27 +2,21 @@
 
 # Fasterer
 
-TODO: Write a gem description
+Make your Rubies go faster with this command line tool inspired by [fast-ruby](https://github.com/JuanitoFatas/fast-ruby).
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'fasterer'
+```shell
+gem install fasterer
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install fasterer
 
 ## Usage
 
-Checkout: https://github.com/JuanitoFatas/fast-ruby
+Run it from the root of your project:
+
+```shell
+fasterer
+```
 
 1. Parallel Assignment: :massign key
 2. begin rescue vs respond_to? # Maybe no method error check
