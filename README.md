@@ -6,7 +6,7 @@ Make your Rubies go faster with this command line tool highly inspired by [fast-
 
 Fasterer will suggest some speed improvements which you can check in detail at the [fast-ruby repo](https://github.com/JuanitoFatas/fast-ruby).
 
-**Please note** that you shouldn't follow the suggestions blindly. Using a while loop instead of a each_with_index shouldn't be considered if you're doing a regular Rails project, but maybe if you're doing something very speed dependent such as Rack or build your own framework, you might consider this speed increase.
+**Please note** that you shouldn't follow the suggestions blindly. Using a while loop instead of a each_with_index probably shouldn't be considered if you're doing a regular Rails project, but maybe if you're doing something very speed dependent such as Rack or if you're building your own framework, you might consider this speed increase.
 
 
 
@@ -22,6 +22,31 @@ Run it from the root of your project:
 
 ```shell
 fasterer
+```
+
+## Configuration
+
+You can turn of speed suggestions with a simple yaml file called **.fasterer.yml** in the root of your project. Example:
+
+
+```yaml
+speedups:
+  parallel_assignment: false
+  rescue_vs_respond_to: true
+  module_eval: true
+  shuffle_first_vs_sample: true
+  for_loop_vs_each: true
+  each_with_index_vs_while: false
+  map_flatten_vs_flat_map: true
+  reverse_each_vs_reverse_each: true
+  select_first_vs_detect: true
+  sort_vs_sort_by: true
+  fetch_with_argument_vs_block: true
+  keys_each_vs_each_key: true
+  hash_merge_bang_vs_hash_brackets: true
+  block_vs_symbol_to_proc: true
+  proc_call_vs_yield: true
+  gsub_vs_tr: true
 ```
 
 ## TODOs:
