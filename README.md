@@ -24,6 +24,25 @@ Run it from the root of your project:
 fasterer
 ```
 
+## Example output
+
+```shell
+
+app/models/post.rb
+Array#select.first is slower than Array#detect. Occured at lines: 57, 61.
+
+db/seeds/cities.rb
+Hash#keys.each is slower than Hash#each_key. Occured at lines: 15.
+
+test/options_test.rb
+Hash#merge! with one argument is slower than Hash#[]. Occured at lines: 84.
+
+test/module_test.rb
+Don't rescue NoMethodError, rather check with respond_to?. Occured at lines: 272, 282.
+
+spec/cache/mem_cache_store_spec.rb
+Use tr instead of gsub when grepping plain strings. Occured at lines: 161.
+```
 ## Configuration
 
 You can turn of speed suggestions with a simple yaml file called **.fasterer.yml** in the root of your project. Example:
