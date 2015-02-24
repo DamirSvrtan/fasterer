@@ -68,7 +68,7 @@ speedups:
   gsub_vs_tr: true
 ```
 
-## TODOs:
+## Speedups TODO:
 
 4. find vs bsearch
 5. Array#count vs Array#size
@@ -78,11 +78,6 @@ speedups:
 21. String concatenation
 22. String#match vs String#start_with?/String#end_with?
 23. String#gsub vs String#sub
-
-# New
-
-values each -> each_value
-class_eval
 
 ## Contributing
 
