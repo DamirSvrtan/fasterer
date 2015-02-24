@@ -37,6 +37,8 @@ module Fasterer
         check_flatten_offense
       when :fetch
         check_fetch_offense
+      when :merge!
+        check_merge_bang_offense
       end
     end
 
@@ -115,6 +117,17 @@ module Fasterer
       return unless body_method_call.receiver.name == method_call.block_argument_names.first
 
       add_offense(:block_vs_symbol_to_proc)
+    end
+
+    def check_merge_bang_offense
+      return unless method_call.arguments.count == 1
+
+      first_argument = method_call.arguments.first
+      return unless first_argument.type == :hash
+
+      if first_argument.element.drop(1).count == 2 # each key and value is an item by itself.
+        add_offense(:hash_merge_bang_vs_hash_brackets)
+      end
     end
 
   end

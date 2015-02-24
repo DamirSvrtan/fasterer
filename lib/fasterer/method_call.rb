@@ -120,6 +120,9 @@ module Fasterer
   end
 
   class Argument
+
+    attr_reader :element
+
     def initialize(element)
       @element = element
     end
