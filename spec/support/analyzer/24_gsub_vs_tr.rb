@@ -12,3 +12,5 @@ class Hello
     'alfabet'.gsub('r', 'b'.gsub('a', 'z'))
   end
 end
+
+petar.gsub('pet', 'fat')

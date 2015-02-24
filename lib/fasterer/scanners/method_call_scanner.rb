@@ -47,7 +47,10 @@ module Fasterer
     end
 
     def check_gsub_offense
-      unless method_call.arguments.first.value.is_a? Regexp
+      first_argument = method_call.arguments.first
+      return if first_argument.nil?
+
+      if first_argument.value.is_a?(String) && first_argument.value.size == 1
         add_offense(:gsub_vs_tr)
       end
     end
