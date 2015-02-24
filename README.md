@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/DamirSvrtan/fasterer.svg?branch=master)](https://travis-ci.org/DamirSvrtan/fasterer)
+[![Code Climate](https://codeclimate.com/github/DamirSvrtan/fasterer/badges/gpa.svg)](https://codeclimate.com/github/DamirSvrtan/fasterer)
 # Fasterer
 
 Make your Rubies go faster with this command line tool highly inspired by [fast-ruby](https://github.com/JuanitoFatas/fast-ruby) and [Sferik's talk at Baruco Conf](https://speakerdeck.com/sferik/writing-fast-ruby).
