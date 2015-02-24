@@ -29,7 +29,6 @@ fasterer
 4. find vs bsearch
 5. Array#count vs Array#size
 7. Enumerable#each + push vs Enumerable#map
-16. Hash#merge! vs Hash#[]=
 17. Hash#merge vs Hash#merge!
 20. String#casecmp vs String#downcase + ==
 21. String concatenation
