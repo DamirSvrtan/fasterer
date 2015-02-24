@@ -1,13 +1,20 @@
 require 'pathname'
 require 'colorize'
+require 'yaml'
 
 require_relative 'analyzer'
 
 module Fasterer
   class FileTraverser
+
+    CONFIG_FILE_NAME = '.fasterer.yml'
+
+    attr_reader :ignored_speedups
+
     def initialize(path)
       @path = Pathname(path)
       @parse_error_paths = []
+      set_ignored_speedups
     end
 
     def traverse
@@ -17,6 +24,16 @@ module Fasterer
         scan_file(@path)
       end
       output_parse_errors if parse_error_paths.any?
+    end
+
+    def set_ignored_speedups
+      @ignored_speedups = if config_file
+        config_file['speedups'].select {|_, value| value == false }.keys.map(&:to_sym)
+      end || []
+    end
+
+    def config_file
+      File.exists?(CONFIG_FILE_NAME) && YAML.load_file(CONFIG_FILE_NAME)
     end
 
     private
@@ -29,7 +46,7 @@ module Fasterer
     rescue Fasterer::ParseError, RubyParser::SyntaxError, Racc::ParseError
       parse_error_paths.push(path)
     else
-      output(analyzer) if analyzer.errors.any?
+      output(analyzer) if offenses_grouped_by_type(analyzer).any?
     end
 
     def traverse_directory(path)
@@ -40,11 +57,16 @@ module Fasterer
 
     def output(analyzer)
       puts analyzer.file_path.colorize(:red)
-      analyzer.errors.group_by(&:explanation).each do |error_group_explanation, error_occurences|
-        puts "#{error_group_explanation}. Occured at lines: #{error_occurences.map(&:line_number).join(', ')}."
+
+      offenses_grouped_by_type(analyzer).each do |error_group_name, error_occurences|
+        puts "#{Fasterer::Offense::EXPLANATIONS[error_group_name]}. Occured at lines: #{error_occurences.map(&:line_number).join(', ')}."
       end
 
       puts
+    end
+
+    def offenses_grouped_by_type(analyzer)
+      analyzer.errors.group_by(&:name).delete_if {|offense_name, _| ignored_speedups.include?(offense_name) }
     end
 
     def output_parse_errors
