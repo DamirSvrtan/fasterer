@@ -40,9 +40,10 @@ module Fasterer
 
     def output(analyzer)
       puts analyzer.file_path.colorize(:red)
-      analyzer.errors.each do |error|
-        puts "#{error.name} occured at line #{error.line_number}."
+      analyzer.errors.group_by(&:explanation).each do |error_group_explanation, error_occurences|
+        puts "#{error_group_explanation}. Occured at lines: #{error_occurences.map(&:line_number).join(', ')}."
       end
+
       puts
     end
 
