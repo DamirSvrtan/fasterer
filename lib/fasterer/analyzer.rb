@@ -21,7 +21,7 @@ module Fasterer
     def scan
       sexp_tree = Fasterer::Parser.parse(@file_content)
       fail ParseError.new(file_path) if sexp_tree.nil?
-      scan_sexp_tree(sexp_tree)
+      traverse_sexp_tree(sexp_tree)
     end
 
     def errors
@@ -30,34 +30,36 @@ module Fasterer
 
     private
 
-    def scan_sexp_tree(sexp_tree)
+    def traverse_sexp_tree(sexp_tree)
       return unless sexp_tree.is_a?(Sexp)
 
-      sexp_tree.each do |element|
-        next unless element.is_a?(Sexp)
-        token = element.first
+      token = sexp_tree.first
 
-        case token
-        when :defn
-          scan_method_definitions(element)
-          scan_sexp_tree(element)
-        when :call, :iter
-          method_call = scan_method_calls(element)
-          scan_sexp_tree(method_call.receiver_element) unless method_call.receiver_element.nil?
-          scan_sexp_tree(method_call.arguments_element)
-          scan_sexp_tree(method_call.block_body) if method_call.has_block?
-        when :masgn
-          scan_parallel_assignment(element)
-          scan_sexp_tree(element)
-        when :for
-          scan_for_loop(element)
-          scan_sexp_tree(element)
-        when :resbody
-          scan_rescue(element)
-          scan_sexp_tree(element)
-        else
-          scan_sexp_tree(element)
-        end
+      scan_by_token(token, sexp_tree)
+
+      case token
+      when :call, :iter
+        method_call = MethodCall.new(sexp_tree)
+        traverse_sexp_tree(method_call.receiver_element) if method_call.receiver_element
+        traverse_sexp_tree(method_call.arguments_element)
+        traverse_sexp_tree(method_call.block_body) if method_call.has_block?
+      else
+        sexp_tree.each { |element| traverse_sexp_tree(element) }
+      end
+    end
+
+    def scan_by_token(token, element)
+      case token
+      when :defn
+        scan_method_definitions(element)
+      when :call, :iter
+        scan_method_calls(element)
+      when :masgn
+        scan_parallel_assignment(element)
+      when :for
+        scan_for_loop(element)
+      when :resbody
+        scan_rescue(element)
       end
     end
 
@@ -75,9 +77,6 @@ module Fasterer
       if method_call_scanner.offense_detected?
         errors.push(method_call_scanner.offense)
       end
-
-      # Need to check receiver, body and block.
-      method_call_scanner.method_call
     end
 
     def scan_parallel_assignment(element)
@@ -95,5 +94,6 @@ module Fasterer
         errors.push(rescue_call_scanner.offense)
       end
     end
+
   end
 end
