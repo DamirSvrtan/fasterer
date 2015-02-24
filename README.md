@@ -45,7 +45,7 @@ Use tr instead of gsub when grepping plain strings. Occured at lines: 161.
 ```
 ## Configuration
 
-You can turn of speed suggestions with a simple yaml file called **.fasterer.yml** in the root of your project. Example:
+You can turn off speed suggestions with a simple yaml file called **.fasterer.yml** in the root of your project. Example:
 
 
 ```yaml
