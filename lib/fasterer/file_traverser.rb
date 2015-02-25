@@ -43,7 +43,7 @@ module Fasterer
     def scan_file(path)
       analyzer = Analyzer.new(path)
       analyzer.scan
-    rescue Fasterer::ParseError, RubyParser::SyntaxError, Racc::ParseError
+    rescue RubyParser::SyntaxError, Racc::ParseError
       parse_error_paths.push(path)
     else
       output(analyzer) if offenses_grouped_by_type(analyzer).any?
