@@ -9,3 +9,7 @@ module Hihi
 end
 
 Hihi.hello
+
+Hihi.module_eval %{
+ puts @foo
+}

@@ -43,7 +43,12 @@ module Fasterer
     end
 
     def check_module_eval_offense
-      add_offense(:module_eval)
+      first_argument = method_call.arguments.first
+      return unless first_argument && first_argument.value.is_a?(String)
+
+      if first_argument.value.include?("def")
+        add_offense(:module_eval)
+      end
     end
 
     def check_gsub_offense
