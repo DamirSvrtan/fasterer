@@ -62,7 +62,7 @@ module Fasterer
         'Calling blocks with call is slower than yielding',
 
       gsub_vs_tr:
-        'Using tr when replacing one-character plain strings is faster than using gsub'
+        'Using tr is faster than gsub when replacing a single character in a string with another single character'
     }
 
   end
