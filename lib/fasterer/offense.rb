@@ -62,7 +62,7 @@ module Fasterer
         'Calling blocks with call is slower than yielding',
 
       gsub_vs_tr:
-        'Use tr instead of gsub when grepping plain strings'
+        'Using tr when replacing one-character plain strings is faster than using gsub'
     }
 
   end
