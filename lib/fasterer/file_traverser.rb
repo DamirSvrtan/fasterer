@@ -32,7 +32,7 @@ module Fasterer
     end
 
     def set_ignored_speedups
-      @ignored_speedups = if config_file
+      @ignored_speedups = if config_file && config_file[SPEEDUPS_KEY]
         config_file[SPEEDUPS_KEY].select {|_, value| value == false }.keys.map(&:to_sym)
       end || []
     end
