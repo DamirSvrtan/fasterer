@@ -46,7 +46,14 @@ Use tr instead of gsub when grepping plain strings. Occured at lines: 161.
 ```
 ## Configuration
 
-You can turn off speed suggestions with a simple yaml file called **.fasterer.yml** in the root of your project. Example:
+Configuration is done through the **.fasterer.yml** file placed in the root of your project.
+
+Options:
+
+  * Turn off speed suggestions
+  * Blacklist files or complete folder paths
+
+Example:
 
 
 ```yaml
@@ -67,6 +74,10 @@ speedups:
   block_vs_symbol_to_proc: true
   proc_call_vs_yield: true
   gsub_vs_tr: true
+
+exclude_paths:
+  - 'vendor/**/*.rb'
+  - 'db/schema.rb'
 ```
 
 ## Speedups TODO:
