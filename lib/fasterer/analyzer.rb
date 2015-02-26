@@ -13,7 +13,7 @@ module Fasterer
     alias_method :path, :file_path
 
     def initialize(file_path)
-      @file_path = file_path
+      @file_path = file_path.to_s
       @file_content = File.read(file_path)
     end
 

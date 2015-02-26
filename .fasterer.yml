@@ -15,3 +15,5 @@ speedups:
   block_vs_symbol_to_proc: true
   proc_call_vs_yield: true
   gsub_vs_tr: true
+exclude_paths:
+  - 'vendor/**/*.rb'

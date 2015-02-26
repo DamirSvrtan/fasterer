@@ -9,12 +9,17 @@ module Fasterer
 
     CONFIG_FILE_NAME = '.fasterer.yml'
 
-    attr_reader :ignored_speedups
+    SPEEDUPS_KEY = 'speedups'
+
+    EXCLUDE_PATHS_KEY = 'exclude_paths'
+
+    attr_reader :ignored_speedups, :ignored_paths
 
     def initialize(path)
       @path = Pathname(path)
       @parse_error_paths = []
       set_ignored_speedups
+      set_ignored_paths
     end
 
     def traverse
@@ -28,7 +33,13 @@ module Fasterer
 
     def set_ignored_speedups
       @ignored_speedups = if config_file
-        config_file['speedups'].select {|_, value| value == false }.keys.map(&:to_sym)
+        config_file[SPEEDUPS_KEY].select {|_, value| value == false }.keys.map(&:to_sym)
+      end || []
+    end
+
+    def set_ignored_paths
+      @ignored_paths = if config_file && config_file[EXCLUDE_PATHS_KEY]
+        config_file[EXCLUDE_PATHS_KEY].flat_map {|path| Dir[path] }
       end || []
     end
 
@@ -50,8 +61,11 @@ module Fasterer
     end
 
     def traverse_directory(path)
-      Dir["#{path}/**/*.rb"].each do |ruby_file|
-        scan_file(ruby_file.split('/').drop(1).join('/'))
+      Dir["#{path}/**/*.rb"].each do |ruby_file_path|
+        relative_ruby_file_path = Pathname(ruby_file_path).relative_path_from(path)
+        unless ignored_paths.include?(relative_ruby_file_path.to_s)
+          scan_file(relative_ruby_file_path)
+        end
       end
     end
 
