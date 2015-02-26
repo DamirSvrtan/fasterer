@@ -39,6 +39,8 @@ module Fasterer
         check_fetch_offense
       when :merge!
         check_merge_bang_offense
+      when :last
+        check_last_offense
       end
     end
 
@@ -139,6 +141,15 @@ module Fasterer
 
       if first_argument.element.drop(1).count == 2 # each key and value is an item by itself.
         add_offense(:hash_merge_bang_vs_hash_brackets)
+      end
+    end
+
+    def check_last_offense
+      return method_call unless method_call.receiver.is_a?(MethodCall)
+
+      case method_call.receiver.name
+      when :select
+        add_offense(:select_last_vs_reverse_detect)
       end
     end
 

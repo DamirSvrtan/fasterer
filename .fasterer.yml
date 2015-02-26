@@ -8,6 +8,7 @@ speedups:
   map_flatten_vs_flat_map: true
   reverse_each_vs_reverse_each: true
   select_first_vs_detect: true
+  select_last_vs_reverse_detect: true
   sort_vs_sort_by: true
   fetch_with_argument_vs_block: true
   keys_each_vs_each_key: true
