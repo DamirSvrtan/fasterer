@@ -54,7 +54,7 @@ module Fasterer
     def scan_file(path)
       analyzer = Analyzer.new(path)
       analyzer.scan
-    rescue RubyParser::SyntaxError, Racc::ParseError
+    rescue RubyParser::SyntaxError, Racc::ParseError, Timeout::Error
       parse_error_paths.push(path)
     else
       output(analyzer) if offenses_grouped_by_type(analyzer).any?
@@ -85,8 +85,8 @@ module Fasterer
 
     def output_parse_errors
       puts 'Fasterer was unable to process some files because the'
-      puts 'internal parser is not able to read some characters.'
-      puts 'Unprocessable files were:'
+      puts 'internal parser is not able to read some characters or'
+      puts 'has timeouted. Unprocessable files were:'
       puts '-----------------------------------------------------'
       puts parse_error_paths
       puts
