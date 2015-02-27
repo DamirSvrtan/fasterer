@@ -65,7 +65,13 @@ module Fasterer
         'Using tr is faster than gsub when replacing a single character in a string with another single character',
 
       select_last_vs_reverse_detect:
-        'Array#select.last is slower than Array#reverse.detect'
+        'Array#select.last is slower than Array#reverse.detect',
+
+      getter_vs_attr_reader:
+        'Use attr_reader for reading ivars',
+
+      setter_vs_attr_writer:
+        'Use attr_writer for writing to ivars'
     }
 
   end

@@ -19,6 +19,8 @@ module Fasterer
     def check_offense
       if method_definition.has_block?
         scan_block_call_offense
+      else
+        scan_getter_and_setter_offense
       end
     end
 
@@ -48,5 +50,37 @@ module Fasterer
         traverse_tree(element, &block)
       end
     end
+
+    def scan_getter_and_setter_offense
+      method_definition.setter? ? scan_setter_offense : scan_getter_offense
+    end
+
+    def scan_setter_offense
+      return if method_definition.arguments.size != 1
+      return if method_definition.body.size != 1
+
+      first_argument = method_definition.arguments.first
+      return if first_argument.type != :regular_argument
+
+      if method_definition.body.first.sexp_type == :iasgn &&
+        method_definition.body.first[1].to_s == "@#{method_definition.name.to_s[0..-2]}" &&
+        method_definition.body.first[2][1] == first_argument.name
+
+        add_offense(:setter_vs_attr_writer)
+      end
+    end
+
+    def scan_getter_offense
+      return if method_definition.arguments.size > 0
+      return if method_definition.body.size != 1
+
+      if method_definition.body.first.sexp_type == :ivar &&
+        method_definition.body.first[1].to_s == "@#{method_definition.name}"
+
+        add_offense(:getter_vs_attr_reader)
+      end
+    end
+
   end
+
 end

@@ -74,6 +74,9 @@ speedups:
   block_vs_symbol_to_proc: true
   proc_call_vs_yield: true
   gsub_vs_tr: true
+  select_last_vs_reverse_detect: true
+  getter_vs_attr_reader: true
+  setter_vs_attr_writer: true
 
 exclude_paths:
   - 'vendor/**/*.rb'
