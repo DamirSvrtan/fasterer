@@ -42,8 +42,6 @@ module Fasterer
                         @element
                       when :iter
                         @element[1]
-                      else
-                        fail '!!!!!!!'
                       end
     end
 
@@ -77,33 +75,17 @@ module Fasterer
         element[2].drop(1).map { |argument| argument }
       end || []
     end
-
-    def token
-      element[0]
-    end
   end
 
-  # For now, used for determening if
-  # the receiver is a reference or not.
+  # For now, used for determening if the
+  # receiver is a reference or a method call.
   class ReceiverFactory
-    attr_reader :name
-    attr_reader :method
-
     def self.new(receiver_info)
-      return if receiver_info.nil?
-      token = receiver_info.first
+      return unless receiver_info.is_a?(Sexp)
 
-      case token
+      case receiver_info.sexp_type
       when :lvar
         return VariableReference.new(receiver_info)
-      when :method_add_arg, :method_add_block
-        case receiver_info[1][0]
-        when :call, :fcall
-          return MethodCall.new(receiver_info[1])
-        else
-          # binding.pry watch out for :method_add_arg
-          # raise 'nije ni metoda'
-        end
       when :call, :iter
         return MethodCall.new(receiver_info)
       end
