@@ -21,16 +21,5 @@ module Fasterer
       end.compact
     end
 
-    def set_multiple_rescue_classes
-      @rescue_classes = element[1].drop(1).map do |rescue_reference|
-        rescue_reference.flatten[2]
-      end
-    end
-
-    def set_single_rescue_class
-      if element[1][0][0] == :var_ref
-        @rescue_classes = Array(element[1][0][1][1])
-      end
-    end
   end
 end
