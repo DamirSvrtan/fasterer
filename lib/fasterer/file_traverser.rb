@@ -7,49 +7,49 @@ require_relative 'analyzer'
 module Fasterer
   class FileTraverser
 
-    CONFIG_FILE_NAME = '.fasterer.yml'
-
-    SPEEDUPS_KEY = 'speedups'
-
+    CONFIG_FILE_NAME  = '.fasterer.yml'
+    SPEEDUPS_KEY      = 'speedups'
     EXCLUDE_PATHS_KEY = 'exclude_paths'
-
-    attr_reader :ignored_speedups, :ignored_paths
 
     def initialize(path)
       @path = Pathname(path)
       @parse_error_paths = []
-      set_ignored_speedups
-      set_ignored_paths
     end
 
     def traverse
       if @path.directory?
-        traverse_directory(@path)
+        scannable_files.each { |ruby_file| scan_file(ruby_file) }
       else
         scan_file(@path)
       end
       output_parse_errors if parse_error_paths.any?
     end
 
-    def set_ignored_speedups
-      @ignored_speedups = if config_file && config_file[SPEEDUPS_KEY]
-        config_file[SPEEDUPS_KEY].select {|_, value| value == false }.keys.map(&:to_sym)
-      end || []
+    def ignored_speedups
+      @ignored_speedups ||=
+        config_file[SPEEDUPS_KEY].select { |_, value| value == false }.keys.map(&:to_sym)
     end
 
-    def set_ignored_paths
-      @ignored_paths = if config_file && config_file[EXCLUDE_PATHS_KEY]
-        config_file[EXCLUDE_PATHS_KEY].flat_map {|path| Dir[path] }
-      end || []
+    def ignored_files
+      @ignored_files ||=
+        config_file[EXCLUDE_PATHS_KEY].flat_map { |path| Dir[path] }
     end
 
     def config_file
-      File.exists?(CONFIG_FILE_NAME) && YAML.load_file(CONFIG_FILE_NAME)
+      @config_file ||= if File.exists?(CONFIG_FILE_NAME)
+        YAML.load_file(CONFIG_FILE_NAME)
+      else
+        nil_config_file
+      end
     end
 
     private
 
     attr_reader :parse_error_paths
+
+    def nil_config_file
+      { SPEEDUPS_KEY => {}, EXCLUDE_PATHS_KEY => [] }
+    end
 
     def scan_file(path)
       analyzer = Analyzer.new(path)
@@ -60,12 +60,13 @@ module Fasterer
       output(analyzer) if offenses_grouped_by_type(analyzer).any?
     end
 
-    def traverse_directory(path)
-      Dir["#{path}/**/*.rb"].each do |ruby_file_path|
-        relative_ruby_file_path = Pathname(ruby_file_path).relative_path_from(path)
-        unless ignored_paths.include?(relative_ruby_file_path.to_s)
-          scan_file(relative_ruby_file_path)
-        end
+    def scannable_files
+      all_files - ignored_files
+    end
+
+    def all_files
+      Dir["#{@path}/**/*.rb"].map do |ruby_file_path|
+        Pathname(ruby_file_path).relative_path_from(@path).to_s
       end
     end
 
@@ -73,14 +74,17 @@ module Fasterer
       puts analyzer.file_path.colorize(:red)
 
       offenses_grouped_by_type(analyzer).each do |error_group_name, error_occurences|
-        puts "#{Fasterer::Offense::EXPLANATIONS[error_group_name]}. Occured at lines: #{error_occurences.map(&:line_number).join(', ')}."
+        puts "#{Fasterer::Offense::EXPLANATIONS[error_group_name]}."\
+             " Occured at lines: #{error_occurences.map(&:line_number).join(', ')}."
       end
 
       puts
     end
 
     def offenses_grouped_by_type(analyzer)
-      analyzer.errors.group_by(&:name).delete_if {|offense_name, _| ignored_speedups.include?(offense_name) }
+      analyzer.errors.group_by(&:name).delete_if do |offense_name, _|
+        ignored_speedups.include?(offense_name)
+      end
     end
 
     def output_parse_errors
