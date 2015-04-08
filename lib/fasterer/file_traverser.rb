@@ -75,7 +75,7 @@ module Fasterer
 
       offenses_grouped_by_type(analyzer).each do |error_group_name, error_occurences|
         puts "#{Fasterer::Offense::EXPLANATIONS[error_group_name]}."\
-             " Occured at lines: #{error_occurences.map(&:line_number).join(', ')}."
+             " Occurred at lines: #{error_occurences.map(&:line_number).join(', ')}."
       end
 
       puts
@@ -90,7 +90,7 @@ module Fasterer
     def output_parse_errors
       puts 'Fasterer was unable to process some files because the'
       puts 'internal parser is not able to read some characters or'
-      puts 'has timeouted. Unprocessable files were:'
+      puts 'has timed out. Unprocessable files were:'
       puts '-----------------------------------------------------'
       puts parse_error_paths
       puts
