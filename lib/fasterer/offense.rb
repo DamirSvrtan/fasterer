@@ -38,7 +38,7 @@ module Fasterer
         'Array#map.flatten(1) is slower than Array#flat_map',
 
       reverse_each_vs_reverse_each:
-        'Array#reverese.each is slower than Array#reverse_each',
+        'Array#reverse.each is slower than Array#reverse_each',
 
       select_first_vs_detect:
         'Array#select.first is slower than Array#detect',
