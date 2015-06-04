@@ -466,6 +466,19 @@ describe Fasterer::MethodCall do
 
   end
 
+  describe 'method call with symbol to proc argument' do
+    let(:code) { '[].select(&:zero?)' }
+
+    let(:call_element) { ripper }
+
+    it 'should detect block pass argument' do
+      expect(method_call.method_name).to eq(:select)
+      expect(method_call.arguments.count).to eq(1)
+      expect(method_call.arguments[0].type).to eq(:block_pass)
+      expect(method_call.has_block?).to be
+    end
+  end
+
   describe 'method call with equals operator' do
 
     let(:code) { 'method_call_with_equals.rb' }

@@ -58,7 +58,7 @@ module Fasterer
     end
 
     def set_block_presence
-      if element.sexp_type == :iter
+      if element.sexp_type == :iter || (arguments.last && arguments.last.type == :block_pass)
         @block_present = true
       end
     end
@@ -71,9 +71,9 @@ module Fasterer
 
     # TODO: write specs for lambdas and procs
     def set_block_argument_names
-      @block_argument_names = if has_block? and element[2].is_a?(Sexp) # hack for lambdas
-        element[2].drop(1).map { |argument| argument }
-      end || []
+      @block_argument_names = if has_block? && element[2].is_a?(Sexp) # hack for lambdas
+                                element[2].drop(1).map { |argument| argument }
+                              end || []
     end
   end
 
@@ -102,7 +102,6 @@ module Fasterer
   end
 
   class Argument
-
     attr_reader :element
 
     def initialize(element)
