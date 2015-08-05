@@ -88,6 +88,8 @@ module Fasterer
         return VariableReference.new(receiver_info)
       when :call, :iter
         return MethodCall.new(receiver_info)
+      when :array, :dot2, :dot3, :lit
+        return Primitive.new(receiver_info)
       end
     end
   end
@@ -114,6 +116,26 @@ module Fasterer
 
     def value
       @value ||= @element[1]
+    end
+  end
+
+  class Primitive
+    attr_reader :element
+
+    def initialize(element)
+      @element = element
+    end
+
+    def type
+      @type ||= @element[0]
+    end
+
+    def range?
+      [:dot2, :dot3, :lit].include?(type)
+    end
+
+    def array?
+      type == :array
     end
   end
 end

@@ -71,7 +71,10 @@ module Fasterer
         'Use attr_reader for reading ivars',
 
       setter_vs_attr_writer:
-        'Use attr_writer for writing to ivars'
+        'Use attr_writer for writing to ivars',
+
+      include_vs_cover_on_range:
+        'Use #cover? instead of #include? on ranges'
     }
 
   end

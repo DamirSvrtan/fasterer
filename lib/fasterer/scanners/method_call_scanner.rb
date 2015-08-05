@@ -41,6 +41,8 @@ module Fasterer
         check_merge_bang_offense
       when :last
         check_last_offense
+      when :include?
+        check_range_include_offense
       end
     end
 
@@ -155,5 +157,10 @@ module Fasterer
       end
     end
 
+    def check_range_include_offense
+      if method_call.receiver.is_a?(Primitive) && method_call.receiver.range?
+        add_offense(:include_vs_cover_on_range)
+      end
+    end
   end
 end
