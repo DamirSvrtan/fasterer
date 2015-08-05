@@ -4,6 +4,7 @@ SimpleCov.start
 
 require 'fasterer'
 require 'pry'
+require 'codeclimate-test-reporter'
 
 def RSpec.root
   @root_path = Pathname.new(File.dirname(__FILE__))
