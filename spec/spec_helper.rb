@@ -6,6 +6,8 @@ require 'fasterer'
 require 'pry'
 require 'codeclimate-test-reporter'
 
+CodeClimate::TestReporter.start
+
 def RSpec.root
   @root_path = Pathname.new(File.dirname(__FILE__))
 end
