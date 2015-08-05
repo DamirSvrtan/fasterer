@@ -4,9 +4,11 @@ SimpleCov.start
 
 require 'fasterer'
 require 'pry'
-require 'codeclimate-test-reporter'
 
-CodeClimate::TestReporter.start
+if ENV['TRAVIS']
+  require 'codeclimate-test-reporter'
+  CodeClimate::TestReporter.start
+end
 
 def RSpec.root
   @root_path = Pathname.new(File.dirname(__FILE__))
