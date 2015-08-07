@@ -2,4 +2,4 @@
 $LOAD_PATH << File.expand_path('../../lib', __FILE__)
 require 'fasterer/cli'
 
-Fasterer::CLI.execute
+Fasterer::CLI.execute ARGV[0]

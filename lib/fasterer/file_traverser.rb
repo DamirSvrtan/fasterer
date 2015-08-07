@@ -66,7 +66,7 @@ module Fasterer
 
     def all_files
       Dir["#{@path}/**/*.rb"].map do |ruby_file_path|
-        Pathname(ruby_file_path).relative_path_from(@path).to_s
+        Pathname(ruby_file_path).to_s
       end
     end
 
