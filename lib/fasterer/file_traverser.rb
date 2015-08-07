@@ -43,9 +43,14 @@ module Fasterer
       end
     end
 
+    def offenses_found?
+      !!offenses_found
+    end
+
     private
 
     attr_reader :parse_error_paths
+    attr_accessor :offenses_found
 
     def nil_config_file
       { SPEEDUPS_KEY => {}, EXCLUDE_PATHS_KEY => [] }
@@ -57,7 +62,10 @@ module Fasterer
     rescue RubyParser::SyntaxError, Racc::ParseError, Timeout::Error
       parse_error_paths.push(path)
     else
-      output(analyzer) if offenses_grouped_by_type(analyzer).any?
+      if offenses_grouped_by_type(analyzer).any?
+        output(analyzer)
+        self.offenses_found = true
+      end
     end
 
     def scannable_files
