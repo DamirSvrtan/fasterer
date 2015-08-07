@@ -3,7 +3,9 @@ require 'simplecov'
 SimpleCov.start
 
 require 'fasterer'
+require 'fasterer/cli'
 require 'pry'
+Dir["#{File.dirname(__FILE__)}/support/*.rb"].each { |f| require f }
 
 if ENV['TRAVIS']
   require 'codeclimate-test-reporter'
