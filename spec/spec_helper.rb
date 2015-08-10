@@ -1,6 +1,9 @@
 require 'bundler/setup'
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/spec/'
+  add_filter '/vendor/'
+end
 
 require 'fasterer'
 require 'pry'
