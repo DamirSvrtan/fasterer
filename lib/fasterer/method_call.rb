@@ -88,7 +88,7 @@ module Fasterer
         return VariableReference.new(receiver_info)
       when :call, :iter
         return MethodCall.new(receiver_info)
-      when :array, :dot2, :dot3, :lit
+      when :array, :dot2, :dot3, :lit, :hash
         return Primitive.new(receiver_info)
       end
     end

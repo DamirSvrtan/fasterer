@@ -87,7 +87,6 @@ exclude_paths:
 ## Speedups TODO:
 
 4. find vs bsearch
-5. Array#count vs Array#size
 7. Enumerable#each + push vs Enumerable#map
 17. Hash#merge vs Hash#merge!
 20. String#casecmp vs String#downcase + ==
