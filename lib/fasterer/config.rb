@@ -16,13 +16,13 @@ module Fasterer
         file[EXCLUDE_PATHS_KEY].flat_map { |path| Dir[path] }
     end
 
-    private
-
     def file
-      @file ||= if File.exists?(FILE_NAME)
-        YAML.load_file(FILE_NAME)
-      else
-        nil_config_file
+      @file ||= begin
+        return nil_file unless File.exist?(FILE_NAME)
+        # Yaml.load_file returns false if the content is blank
+        loaded = YAML.load_file(FILE_NAME) || nil_file
+        # if the loaded file misses any of the two keys.
+        loaded.merge!(nil_file) { |_k, v1, v2| v1 || v2 }
       end
     end
 

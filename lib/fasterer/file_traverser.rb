@@ -6,6 +6,12 @@ require_relative 'config'
 
 module Fasterer
   class FileTraverser
+    CONFIG_FILE_NAME  = Config::FILE_NAME
+    SPEEDUPS_KEY      = Config::SPEEDUPS_KEY
+    EXCLUDE_PATHS_KEY = Config::EXCLUDE_PATHS_KEY
+
+    attr_reader :config
+
     def initialize(path)
       @path = Pathname(path)
       @parse_error_paths = []
@@ -19,6 +25,10 @@ module Fasterer
         scan_file(@path)
       end
       output_parse_errors if parse_error_paths.any?
+    end
+
+    def config_file
+      config.file
     end
 
     private
@@ -35,7 +45,7 @@ module Fasterer
     end
 
     def scannable_files
-      all_files - @config.ignored_files
+      all_files - ignored_files
     end
 
     def all_files
@@ -57,7 +67,7 @@ module Fasterer
 
     def offenses_grouped_by_type(analyzer)
       analyzer.errors.group_by(&:name).delete_if do |offense_name, _|
-        @config.ignored_speedups.include?(offense_name)
+        ignored_speedups.include?(offense_name)
       end
     end
 
@@ -68,6 +78,18 @@ module Fasterer
       puts '-----------------------------------------------------'
       puts parse_error_paths
       puts
+    end
+
+    def ignored_speedups
+      config.ignored_speedups
+    end
+
+    def ignored_files
+      config.ignored_files
+    end
+
+    def nil_config_file
+      config.nil_file
     end
   end
 end
