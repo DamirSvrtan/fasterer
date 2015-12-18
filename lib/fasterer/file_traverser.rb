@@ -36,8 +36,13 @@ module Fasterer
     end
 
     def config_file
-      @config_file ||= if File.exists?(CONFIG_FILE_NAME)
-        YAML.load_file(CONFIG_FILE_NAME)
+      @config_file ||= if File.exist?(CONFIG_FILE_NAME)
+        loaded = YAML.load_file(CONFIG_FILE_NAME)
+        if loaded
+          loaded.merge!(nil_config_file) { |_k, v1, v2| v1 || v2 }
+        else
+          nil_config_file
+        end
       else
         nil_config_file
       end
