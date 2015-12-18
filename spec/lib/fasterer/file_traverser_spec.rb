@@ -27,6 +27,34 @@ describe Fasterer::FileTraverser do
       end
     end
 
+    context 'missing exclude_paths key' do
+      before(:each) do
+        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME,
+                    ['speedups:'])
+      end
+
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns nil_config_file' do
+        expect(file_traverser.config_file)
+          .to eq(file_traverser.send(:nil_config_file))
+      end
+    end
+
+    context 'missing speedups key' do
+      before(:each) do
+        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME,
+                    ['exclude_paths:'])
+      end
+
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns nil_config_file' do
+        expect(file_traverser.config_file)
+          .to eq(file_traverser.send(:nil_config_file))
+      end
+    end
+
     context 'with empty values' do
       before(:each) do
         create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME,
