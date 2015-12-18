@@ -38,12 +38,10 @@ module Fasterer
     def config_file
       @config_file ||= begin
         return nil_config_file unless File.exist?(CONFIG_FILE_NAME)
-
-        if loaded = YAML.load_file(CONFIG_FILE_NAME)
-          loaded.merge!(nil_config_file) { |_k, v1, v2| v1 || v2 }
-        else
-          nil_config_file
-        end
+        # Yaml.load_file returns false if the content is blank
+        loaded = YAML.load_file(CONFIG_FILE_NAME) || nil_config_file
+        # if the loaded file misses any of the two keys.
+        loaded.merge!(nil_config_file) { |_k, v1, v2| v1 || v2 }
       end
     end
 
