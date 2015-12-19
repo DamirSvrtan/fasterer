@@ -196,5 +196,79 @@ describe Fasterer::FileTraverser do
         expect(file_traverser.send(:scannable_files)).to eq([file_name])
       end
     end
+
+    context 'nested ruby files' do
+      before(:each) do
+        create_file('something.rb')
+        create_file('nested/something.rb')
+      end
+
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns files properly' do
+        expect(file_traverser.send(:scannable_files))
+          .to match_array(['something.rb', 'nested/something.rb'])
+      end
+    end
+
+    context 'ruby files but nested ignored explicitly' do
+      let(:config_file_content) do
+        "exclude_paths:\n"\
+        "  - 'nested/something.rb'"
+      end
+
+      before(:each) do
+        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
+        create_file('something.rb')
+        create_file('nested/something.rb')
+      end
+
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns unignored files' do
+        expect(file_traverser.send(:scannable_files))
+          .to match_array(['something.rb'])
+      end
+    end
+
+    context 'ruby files but nested ignored with *' do
+      let(:config_file_content) do
+        "exclude_paths:\n"\
+        "  - 'nested/*'"
+      end
+
+      before(:each) do
+        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
+        create_file('something.rb')
+        create_file('nested/something.rb')
+      end
+
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns unignored files' do
+        expect(file_traverser.send(:scannable_files))
+          .to match_array(['something.rb'])
+      end
+    end
+
+    context 'ruby files but unnested ignored' do
+      let(:config_file_content) do
+        "exclude_paths:\n"\
+        "  - 'something.rb'"
+      end
+
+      before(:each) do
+        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
+        create_file('something.rb')
+        create_file('nested/something.rb')
+      end
+
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns unignored files' do
+        expect(file_traverser.send(:scannable_files))
+          .to match_array(['nested/something.rb'])
+      end
+    end
   end
 end
