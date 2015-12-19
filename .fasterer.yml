@@ -21,4 +21,9 @@ speedups:
   setter_vs_attr_writer: true
 
 exclude_paths:
+  - 'spec/support/analyzer/*.rb'
+  - 'spec/support/binary_call/*.rb'
+  - 'spec/support/method_call/*.rb'
+  - 'spec/support/method_definition/*.rb'
+  - 'spec/support/rescue_call/*.rb'
   - 'vendor/**/*.rb'

@@ -1,19 +1,21 @@
 require 'pathname'
 require 'colorize'
-require 'yaml'
 
 require_relative 'analyzer'
+require_relative 'config'
 
 module Fasterer
   class FileTraverser
+    CONFIG_FILE_NAME  = Config::FILE_NAME
+    SPEEDUPS_KEY      = Config::SPEEDUPS_KEY
+    EXCLUDE_PATHS_KEY = Config::EXCLUDE_PATHS_KEY
 
-    CONFIG_FILE_NAME  = '.fasterer.yml'
-    SPEEDUPS_KEY      = 'speedups'
-    EXCLUDE_PATHS_KEY = 'exclude_paths'
+    attr_reader :config
 
     def initialize(path)
       @path = Pathname(path)
       @parse_error_paths = []
+      @config = Config.new
     end
 
     def traverse
@@ -25,22 +27,8 @@ module Fasterer
       output_parse_errors if parse_error_paths.any?
     end
 
-    def ignored_speedups
-      @ignored_speedups ||=
-        config_file[SPEEDUPS_KEY].select { |_, value| value == false }.keys.map(&:to_sym)
-    end
-
-    def ignored_files
-      @ignored_files ||=
-        config_file[EXCLUDE_PATHS_KEY].flat_map { |path| Dir[path] }
-    end
-
     def config_file
-      @config_file ||= if File.exists?(CONFIG_FILE_NAME)
-        YAML.load_file(CONFIG_FILE_NAME)
-      else
-        nil_config_file
-      end
+      config.file
     end
 
     def offenses_found?
@@ -51,10 +39,6 @@ module Fasterer
 
     attr_reader :parse_error_paths
     attr_accessor :offenses_found
-
-    def nil_config_file
-      { SPEEDUPS_KEY => {}, EXCLUDE_PATHS_KEY => [] }
-    end
 
     def scan_file(path)
       analyzer = Analyzer.new(path)
@@ -102,6 +86,18 @@ module Fasterer
       puts '-----------------------------------------------------'
       puts parse_error_paths
       puts
+    end
+
+    def ignored_speedups
+      config.ignored_speedups
+    end
+
+    def ignored_files
+      config.ignored_files
+    end
+
+    def nil_config_file
+      config.nil_file
     end
   end
 end

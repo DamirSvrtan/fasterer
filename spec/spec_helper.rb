@@ -1,9 +1,14 @@
 require 'bundler/setup'
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/spec/'
+  add_filter '/vendor/'
+end
 
 require 'fasterer'
+require 'fasterer/cli'
 require 'pry'
+Dir["#{File.dirname(__FILE__)}/support/*.rb"].each { |f| require f }
 
 if ENV['TRAVIS']
   require 'codeclimate-test-reporter'
