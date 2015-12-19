@@ -119,4 +119,80 @@ describe Fasterer::FileTraverser do
       end
     end
   end
+
+  describe 'scannable files' do
+    context 'when no files in folder' do
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns empty array' do
+        expect(file_traverser.send(:scannable_files)).to eq([])
+      end
+    end
+
+    context 'only a non-ruby file inside' do
+      before do
+        create_file('something.yml')
+      end
+
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns empty array' do
+        expect(file_traverser.send(:scannable_files)).to eq([])
+      end
+    end
+
+    context 'a ruby file inside' do
+      FILE_NAME = 'something.rb'
+
+      before do
+        create_file(FILE_NAME)
+      end
+
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns array with that file inside' do
+        expect(file_traverser.send(:scannable_files)).to eq([FILE_NAME])
+      end
+    end
+
+    context 'a ruby file inside that is ignored' do
+      FILE_NAME = 'something.rb'
+
+      let(:config_file_content) do
+        "exclude_paths:\n"\
+        "  - '#{FILE_NAME}'"
+      end
+
+      before(:each) do
+        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME,
+                    config_file_content)
+      end
+
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns empty array' do
+        expect(file_traverser.send(:scannable_files)).to eq([])
+      end
+    end
+
+    context 'a ruby file inside that is not ignored' do
+      FILE_NAME = 'something.rb'
+
+      let(:config_file_content) do
+        "exclude_paths:\n"\
+        "  - 'sumthing.rb'"
+      end
+
+      before(:each) do
+        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME,
+                    config_file_content)
+      end
+
+      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+      it 'returns empty array' do
+        expect(file_traverser.send(:scannable_files)).to eq([])
+      end
+    end
+  end
 end

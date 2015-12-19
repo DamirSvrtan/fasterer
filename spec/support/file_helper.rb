@@ -7,7 +7,7 @@ module FileHelper
   #
   # path    - An String path of file.
   # content - An String or an Array of Strings content of file.
-  def create_file(path, content)
+  def create_file(path, content = '')
     file_path = File.expand_path(path)
     dir_path = File.dirname(file_path)
     FileUtils.makedirs(dir_path) unless File.exist?(dir_path)
