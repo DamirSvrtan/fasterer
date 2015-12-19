@@ -186,8 +186,7 @@ describe Fasterer::FileTraverser do
       end
 
       before(:each) do
-        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME,
-                    config_file_content)
+        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
         create_file(file_name)
       end
 

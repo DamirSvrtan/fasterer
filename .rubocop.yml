@@ -1,3 +1,5 @@
+LineLength:
+  Max: 100
 AllCops:
   Include:
     - '**/Rakefile'
