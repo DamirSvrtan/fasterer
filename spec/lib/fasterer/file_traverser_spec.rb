@@ -142,30 +142,32 @@ describe Fasterer::FileTraverser do
     end
 
     context 'a ruby file inside' do
-      FILE_NAME = 'something.rb'
+      let(:file_name) { 'something.rb' }
 
       before do
-        create_file(FILE_NAME)
+        create_file(file_name)
       end
 
       let(:file_traverser) { Fasterer::FileTraverser.new('.') }
 
       it 'returns array with that file inside' do
-        expect(file_traverser.send(:scannable_files)).to eq([FILE_NAME])
+        expect(file_traverser.send(:scannable_files)).to eq([file_name])
       end
     end
 
     context 'a ruby file inside that is ignored' do
-      FILE_NAME = 'something.rb'
+      let(:file_name) { 'something.rb' }
 
       let(:config_file_content) do
         "exclude_paths:\n"\
-        "  - '#{FILE_NAME}'"
+        "  - '#{file_name}'"
       end
 
       before(:each) do
         create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME,
                     config_file_content)
+
+        create_file(file_name)
       end
 
       let(:file_traverser) { Fasterer::FileTraverser.new('.') }
@@ -176,7 +178,7 @@ describe Fasterer::FileTraverser do
     end
 
     context 'a ruby file inside that is not ignored' do
-      FILE_NAME = 'something.rb'
+      let(:file_name) { 'something.rb' }
 
       let(:config_file_content) do
         "exclude_paths:\n"\
@@ -186,12 +188,13 @@ describe Fasterer::FileTraverser do
       before(:each) do
         create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME,
                     config_file_content)
+        create_file(file_name)
       end
 
       let(:file_traverser) { Fasterer::FileTraverser.new('.') }
 
       it 'returns empty array' do
-        expect(file_traverser.send(:scannable_files)).to eq([])
+        expect(file_traverser.send(:scannable_files)).to eq([file_name])
       end
     end
   end
