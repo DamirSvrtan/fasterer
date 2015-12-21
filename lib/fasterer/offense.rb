@@ -76,6 +76,5 @@ module Fasterer
       include_vs_cover_on_range:
         'Use #cover? instead of #include? on ranges'
     }
-
   end
 end

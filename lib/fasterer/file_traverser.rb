@@ -11,6 +11,7 @@ module Fasterer
     EXCLUDE_PATHS_KEY = Config::EXCLUDE_PATHS_KEY
 
     attr_reader :config
+    attr_reader :parse_error_paths
 
     def initialize(path)
       @path = Pathname(path)
@@ -37,14 +38,13 @@ module Fasterer
 
     private
 
-    attr_reader :parse_error_paths
     attr_accessor :offenses_found
 
     def scan_file(path)
       analyzer = Analyzer.new(path)
       analyzer.scan
-    rescue RubyParser::SyntaxError, Racc::ParseError, Timeout::Error
-      parse_error_paths.push(path)
+    rescue RubyParser::SyntaxError, Racc::ParseError, Timeout::Error => e
+      parse_error_paths.push(ErrorData.new(path, e.class, e.message).to_s)
     else
       if offenses_grouped_by_type(analyzer).any?
         output(analyzer)
@@ -85,7 +85,6 @@ module Fasterer
       puts 'has timed out. Unprocessable files were:'
       puts '-----------------------------------------------------'
       puts parse_error_paths
-      puts
     end
 
     def ignored_speedups
@@ -98,6 +97,12 @@ module Fasterer
 
     def nil_config_file
       config.nil_file
+    end
+  end
+
+  ErrorData = Struct.new(:file_path, :error_class, :error_message) do
+    def to_s
+      "#{file_path} - #{error_class} - #{error_message}"
     end
   end
 end
