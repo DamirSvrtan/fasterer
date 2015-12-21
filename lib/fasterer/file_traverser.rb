@@ -1,5 +1,6 @@
 require 'pathname'
 require 'colorize'
+require 'English'
 
 require_relative 'analyzer'
 require_relative 'config'

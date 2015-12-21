@@ -44,7 +44,7 @@ describe Fasterer::FileTraverser do
     context 'with speedups content but no exclude_paths' do
       let(:config_file_content) do
         "speedups:\n"\
-        "  keys_each_vs_each_key: true"
+        '  keys_each_vs_each_key: true'
       end
 
       before(:each) do

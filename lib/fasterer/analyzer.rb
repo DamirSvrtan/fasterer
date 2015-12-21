@@ -92,6 +92,5 @@ module Fasterer
         errors.push(rescue_call_scanner.offense)
       end
     end
-
   end
 end

@@ -8,13 +8,13 @@ describe Fasterer::FileTraverser do
     context 'success' do
       it 'when no files exist' do
         `#{fasterer_bin}`
-        expect($?.exitstatus).to eq(0)
+        expect($CHILD_STATUS.exitstatus).to eq(0)
       end
 
       it 'when no files with offenses exist' do
         create_file('user.rb', '[].sample')
         `#{fasterer_bin}`
-        expect($?.exitstatus).to eq(0)
+        expect($CHILD_STATUS.exitstatus).to eq(0)
       end
     end
 
@@ -22,7 +22,7 @@ describe Fasterer::FileTraverser do
       it 'when file with offenses exists' do
         create_file('user.rb', '[].shuffle.first')
         `#{fasterer_bin}`
-        expect($?.exitstatus).to eq(1)
+        expect($CHILD_STATUS.exitstatus).to eq(1)
       end
     end
   end

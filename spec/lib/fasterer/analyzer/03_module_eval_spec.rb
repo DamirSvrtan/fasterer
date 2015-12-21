@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fasterer::Analyzer do
-
   let(:test_file_path) { RSpec.root.join('support', 'analyzer', '03_module_eval.rb') }
 
   it 'should detect module eval' do

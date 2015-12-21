@@ -56,7 +56,6 @@ module Fasterer
   end
 
   class MethodDefinitionArgument
-
     attr_reader :element, :name, :type
 
     def initialize(element)
@@ -85,13 +84,12 @@ module Fasterer
 
     def set_argument_type
       @type = if element.is_a?(Symbol)
-        :regular_argument
-      elsif element.is_a?(Sexp) && element.sexp_type == :lasgn
-        :default_argument
-      elsif element.is_a?(Sexp) && element.sexp_type == :kwarg
-        :keyword_argument
+                :regular_argument
+              elsif element.is_a?(Sexp) && element.sexp_type == :lasgn
+                :default_argument
+              elsif element.is_a?(Sexp) && element.sexp_type == :kwarg
+                :keyword_argument
       end
     end
   end
-
 end

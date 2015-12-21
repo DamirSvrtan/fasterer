@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fasterer::Analyzer do
-
   let(:test_file_path) { RSpec.root.join('support', 'analyzer', '27_setter_vs_attr_writer.rb') }
 
   it 'should detect 2 setters' do

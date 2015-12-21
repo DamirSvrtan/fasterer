@@ -15,11 +15,8 @@ module Fasterer
       return if element[1].sexp_type != :array
 
       @rescue_classes = element[1].drop(1).map do |rescue_reference|
-        if rescue_reference.sexp_type == :const
-          rescue_reference[1]
-        end
+        rescue_reference[1] if rescue_reference.sexp_type == :const
       end.compact
     end
-
   end
 end

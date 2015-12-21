@@ -50,9 +50,7 @@ module Fasterer
       first_argument = method_call.arguments.first
       return unless first_argument && first_argument.value.is_a?(String)
 
-      if first_argument.value.include?("def")
-        add_offense(:module_eval)
-      end
+      add_offense(:module_eval) if first_argument.value.include?('def')
     end
 
     def check_gsub_offense
@@ -62,7 +60,7 @@ module Fasterer
       return if first_argument.nil? || second_argument.nil?
 
       if first_argument.value.is_a?(String) && first_argument.value.size == 1 &&
-           second_argument.value.is_a?(String) && second_argument.value.size == 1
+         second_argument.value.is_a?(String) && second_argument.value.size == 1
 
         add_offense(:gsub_vs_tr)
       end

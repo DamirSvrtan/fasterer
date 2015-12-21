@@ -64,14 +64,12 @@ module Fasterer
     end
 
     def set_block_body
-      if has_block?
-        @block_body = element[3]
-      end
+      @block_body = element[3] if has_block?
     end
 
     # TODO: write specs for lambdas and procs
     def set_block_argument_names
-      @block_argument_names = if has_block? && element[2].is_a?(Sexp) # hack for lambdas
+      @block_argument_names = if has_block? && element[2].is_a?(Sexp) # HACK: for lambdas
                                 element[2].drop(1).map { |argument| argument }
                               end || []
     end

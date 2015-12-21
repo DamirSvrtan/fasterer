@@ -31,8 +31,8 @@ module Fasterer
         method_call = MethodCall.new(element)
 
         if method_call.receiver.is_a?(Fasterer::VariableReference) &&
-          method_call.receiver.name == method_definition.block_argument_name &&
-          method_call.method_name == :call
+           method_call.receiver.name == method_definition.block_argument_name &&
+           method_call.method_name == :call
 
           add_offense(:proc_call_vs_yield) && return
         end
@@ -63,8 +63,8 @@ module Fasterer
       return if first_argument.type != :regular_argument
 
       if method_definition.body.first.sexp_type == :iasgn &&
-        method_definition.body.first[1].to_s == "@#{method_definition.name.to_s[0..-2]}" &&
-        method_definition.body.first[2][1] == first_argument.name
+         method_definition.body.first[1].to_s == "@#{method_definition.name.to_s[0..-2]}" &&
+         method_definition.body.first[2][1] == first_argument.name
 
         add_offense(:setter_vs_attr_writer)
       end
@@ -75,12 +75,10 @@ module Fasterer
       return if method_definition.body.size != 1
 
       if method_definition.body.first.sexp_type == :ivar &&
-        method_definition.body.first[1].to_s == "@#{method_definition.name}"
+         method_definition.body.first[1].to_s == "@#{method_definition.name}"
 
         add_offense(:getter_vs_attr_reader)
       end
     end
-
   end
-
 end

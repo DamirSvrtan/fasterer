@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fasterer::Analyzer do
-
   let(:test_file_path) { RSpec.root.join('support', 'analyzer', '10_map_flatten_vs_flat_map.rb') }
 
   it 'should detect a map{}.flatten(1) ' do

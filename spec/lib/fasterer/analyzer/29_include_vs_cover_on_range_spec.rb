@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fasterer::Analyzer do
-
   let(:test_file_path) do
     RSpec.root.join('support', 'analyzer', '29_include_vs_cover_on_range.rb')
   end

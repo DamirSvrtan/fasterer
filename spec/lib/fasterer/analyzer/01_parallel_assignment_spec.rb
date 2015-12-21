@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fasterer::Analyzer do
-
   let(:test_file_path) { RSpec.root.join('support', 'analyzer', '01_parallel_assignment.rb') }
 
   it 'should detect parallel assignment 2 times' do

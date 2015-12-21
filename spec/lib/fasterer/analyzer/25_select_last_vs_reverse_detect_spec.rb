@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fasterer::Analyzer do
-
   let(:test_file_path) { RSpec.root.join('support', 'analyzer', '25_select_last_vs_reverse_detect.rb') }
 
   it 'should detect select last once' do

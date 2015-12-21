@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Fasterer::Analyzer do
-
   let(:test_file_path) { RSpec.root.join('support', 'analyzer', '14_fetch_with_argument_vs_block.rb') }
 
   it 'should detect keys fetch with argument once' do
