@@ -121,153 +121,202 @@ describe Fasterer::FileTraverser do
   end
 
   describe 'scannable files' do
-    context 'when no files in folder' do
-      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+    let(:file_traverser) { Fasterer::FileTraverser.new(argument) }
 
-      it 'returns empty array' do
-        expect(file_traverser.send(:scannable_files)).to eq([])
+    describe 'with no ARGV' do
+      let(:argument) { '.' }
+
+      context 'when no files in folder' do
+        it 'returns empty array' do
+          expect(file_traverser.scannable_files).to eq([])
+        end
+      end
+
+      context 'only a non-ruby file inside' do
+        before do
+          create_file('something.yml')
+        end
+
+        it 'returns empty array' do
+          expect(file_traverser.scannable_files).to eq([])
+        end
+      end
+
+      context 'a ruby file inside' do
+        let(:file_name) { 'something.rb' }
+
+        before do
+          create_file(file_name)
+        end
+
+        it 'returns array with that file inside' do
+          expect(file_traverser.scannable_files).to eq([file_name])
+        end
+      end
+
+      context 'a ruby file inside that is ignored' do
+        let(:file_name) { 'something.rb' }
+
+        let(:config_file_content) do
+          "exclude_paths:\n"\
+          "  - '#{file_name}'"
+        end
+
+        before(:each) do
+          create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME,
+                      config_file_content)
+
+          create_file(file_name)
+        end
+
+        it 'returns empty array' do
+          expect(file_traverser.scannable_files).to eq([])
+        end
+      end
+
+      context 'a ruby file inside that is not ignored' do
+        let(:file_name) { 'something.rb' }
+
+        let(:config_file_content) do
+          "exclude_paths:\n"\
+          "  - 'sumthing.rb'"
+        end
+
+        before(:each) do
+          create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
+          create_file(file_name)
+        end
+
+        it 'returns empty array' do
+          expect(file_traverser.scannable_files).to eq([file_name])
+        end
+      end
+
+      context 'nested ruby files' do
+        before(:each) do
+          create_file('something.rb')
+          create_file('nested/something.rb')
+        end
+
+        it 'returns files properly' do
+          expect(file_traverser.scannable_files)
+            .to match_array(['something.rb', 'nested/something.rb'])
+        end
+      end
+
+      context 'ruby files but nested ignored explicitly' do
+        let(:config_file_content) do
+          "exclude_paths:\n"\
+          "  - 'nested/something.rb'"
+        end
+
+        before(:each) do
+          create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
+          create_file('something.rb')
+          create_file('nested/something.rb')
+        end
+
+        it 'returns unignored files' do
+          expect(file_traverser.scannable_files)
+            .to match_array(['something.rb'])
+        end
+      end
+
+      context 'ruby files but nested ignored with *' do
+        let(:config_file_content) do
+          "exclude_paths:\n"\
+          "  - 'nested/*'"
+        end
+
+        before(:each) do
+          create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
+          create_file('something.rb')
+          create_file('nested/something.rb')
+        end
+
+        it 'returns unignored files' do
+          expect(file_traverser.scannable_files)
+            .to match_array(['something.rb'])
+        end
+      end
+
+      context 'ruby files but unnested ignored' do
+        let(:config_file_content) do
+          "exclude_paths:\n"\
+          "  - 'something.rb'"
+        end
+
+        before(:each) do
+          create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
+          create_file('something.rb')
+          create_file('nested/something.rb')
+        end
+
+        it 'returns unignored files' do
+          expect(file_traverser.scannable_files).to match_array(['nested/something.rb'])
+        end
       end
     end
 
-    context 'only a non-ruby file inside' do
-      before do
-        create_file('something.yml')
+    describe 'with one file argument' do
+      let(:argument) { 'something.rb' }
+
+      context 'and no config file' do
+        before do
+          create_file('something.rb')
+        end
+
+        it 'returns that file' do
+          expect(file_traverser.scannable_files).to match_array([argument])
+        end
       end
 
-      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+      context 'and config file ignoring it' do
+        let(:config_file_content) do
+          "exclude_paths:\n"\
+          "  - 'something.rb'"
+        end
 
-      it 'returns empty array' do
-        expect(file_traverser.send(:scannable_files)).to eq([])
-      end
-    end
+        before do
+          create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
+          create_file('something.rb')
+        end
 
-    context 'a ruby file inside' do
-      let(:file_name) { 'something.rb' }
-
-      before do
-        create_file(file_name)
-      end
-
-      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
-
-      it 'returns array with that file inside' do
-        expect(file_traverser.send(:scannable_files)).to eq([file_name])
-      end
-    end
-
-    context 'a ruby file inside that is ignored' do
-      let(:file_name) { 'something.rb' }
-
-      let(:config_file_content) do
-        "exclude_paths:\n"\
-        "  - '#{file_name}'"
-      end
-
-      before(:each) do
-        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME,
-                    config_file_content)
-
-        create_file(file_name)
-      end
-
-      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
-
-      it 'returns empty array' do
-        expect(file_traverser.send(:scannable_files)).to eq([])
+        it 'returns empty array' do
+          expect(file_traverser.scannable_files).to match_array([])
+        end
       end
     end
 
-    context 'a ruby file inside that is not ignored' do
-      let(:file_name) { 'something.rb' }
+    describe 'with one folder argument' do
+      let(:argument) { 'nested/' }
 
-      let(:config_file_content) do
-        "exclude_paths:\n"\
-        "  - 'sumthing.rb'"
+      let(:file_names) { ['nested/something.rb', 'nested/something_else.rb'] }
+
+      context 'and no config file' do
+        before do
+          file_names.each { |file_name| create_file(file_name) }
+        end
+
+        it 'returns those files' do
+          expect(file_traverser.scannable_files).to match_array(file_names)
+        end
       end
 
-      before(:each) do
-        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
-        create_file(file_name)
-      end
+      context 'and config file ignoring it' do
+        let(:config_file_content) do
+          "exclude_paths:\n"\
+          "  - 'nested/*'"
+        end
 
-      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+        before do
+          create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
+          file_names.each { |file_name| create_file(file_name) }
+        end
 
-      it 'returns empty array' do
-        expect(file_traverser.send(:scannable_files)).to eq([file_name])
-      end
-    end
-
-    context 'nested ruby files' do
-      before(:each) do
-        create_file('something.rb')
-        create_file('nested/something.rb')
-      end
-
-      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
-
-      it 'returns files properly' do
-        expect(file_traverser.send(:scannable_files))
-          .to match_array(['something.rb', 'nested/something.rb'])
-      end
-    end
-
-    context 'ruby files but nested ignored explicitly' do
-      let(:config_file_content) do
-        "exclude_paths:\n"\
-        "  - 'nested/something.rb'"
-      end
-
-      before(:each) do
-        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
-        create_file('something.rb')
-        create_file('nested/something.rb')
-      end
-
-      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
-
-      it 'returns unignored files' do
-        expect(file_traverser.send(:scannable_files))
-          .to match_array(['something.rb'])
-      end
-    end
-
-    context 'ruby files but nested ignored with *' do
-      let(:config_file_content) do
-        "exclude_paths:\n"\
-        "  - 'nested/*'"
-      end
-
-      before(:each) do
-        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
-        create_file('something.rb')
-        create_file('nested/something.rb')
-      end
-
-      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
-
-      it 'returns unignored files' do
-        expect(file_traverser.send(:scannable_files))
-          .to match_array(['something.rb'])
-      end
-    end
-
-    context 'ruby files but unnested ignored' do
-      let(:config_file_content) do
-        "exclude_paths:\n"\
-        "  - 'something.rb'"
-      end
-
-      before(:each) do
-        create_file(Fasterer::FileTraverser::CONFIG_FILE_NAME, config_file_content)
-        create_file('something.rb')
-        create_file('nested/something.rb')
-      end
-
-      let(:file_traverser) { Fasterer::FileTraverser.new('.') }
-
-      it 'returns unignored files' do
-        expect(file_traverser.send(:scannable_files))
-          .to match_array(['nested/something.rb'])
+        it 'returns empty array' do
+          expect(file_traverser.scannable_files).to match_array([])
+        end
       end
     end
   end

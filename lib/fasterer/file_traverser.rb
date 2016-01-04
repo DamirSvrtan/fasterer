@@ -1,6 +1,7 @@
 require 'pathname'
 require 'colorize'
 require 'English'
+require 'pry'
 
 require_relative 'analyzer'
 require_relative 'config'
@@ -16,19 +17,15 @@ module Fasterer
     attr_accessor :offenses_total_count
 
     def initialize(path)
-      @path = Pathname(path)
+      @path = Pathname(path || '.')
       @parse_error_paths = []
       @config = Config.new
       @offenses_total_count = 0
     end
 
     def traverse
-      if @path.directory?
-        scannable_files.each { |ruby_file| scan_file(ruby_file) }
-      else
-        scan_file(@path)
-      end
-      output_parse_errors if parse_error_paths.any?
+      traverse_files
+      output_parse_errors
       output_statistics
     end
 
@@ -48,6 +45,14 @@ module Fasterer
 
     attr_accessor :offenses_found
 
+    def traverse_files
+      if @path.exist?
+        scannable_files.each { |ruby_file| scan_file(ruby_file) }
+      else
+        output_unable_to_find_file(@path)
+      end
+    end
+
     def scan_file(path)
       analyzer = Analyzer.new(path)
       analyzer.scan
@@ -62,9 +67,17 @@ module Fasterer
     end
 
     def all_files
-      Dir["#{@path}/**/*.rb"].map do |ruby_file_path|
-        Pathname(ruby_file_path).relative_path_from(@path).to_s
+      if @path.directory?
+        Dir[File.join(@path, '**', '*.rb')].map do |ruby_file_path|
+          Pathname(ruby_file_path).relative_path_from(root_dir).to_s
+        end
+      else
+        [@path.to_s]
       end
+    end
+
+    def root_dir
+      @root_dir ||= Pathname('.')
     end
 
     def output(analyzer)
@@ -85,6 +98,8 @@ module Fasterer
     end
 
     def output_parse_errors
+      return if parse_error_paths.none?
+
       puts 'Fasterer was unable to process some files because the'
       puts 'internal parser is not able to read some characters or'
       puts 'has timed out. Unprocessable files were:'
@@ -95,6 +110,10 @@ module Fasterer
 
     def output_statistics
       puts Statistics.new(self)
+    end
+
+    def output_unable_to_find_file(path)
+      puts "No such file or directory - #{path}".colorize(:red)
     end
 
     def ignored_speedups
