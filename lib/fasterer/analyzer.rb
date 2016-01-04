@@ -52,8 +52,6 @@ module Fasterer
         scan_method_definitions(element)
       when :call, :iter
         scan_method_calls(element)
-      when :masgn
-        scan_parallel_assignment(element)
       when :for
         scan_for_loop(element)
       when :resbody
@@ -75,10 +73,6 @@ module Fasterer
       if method_call_scanner.offense_detected?
         errors.push(method_call_scanner.offense)
       end
-    end
-
-    def scan_parallel_assignment(element)
-      errors.push(Fasterer::Offense.new(:parallel_assignment, element.line))
     end
 
     def scan_for_loop(element)

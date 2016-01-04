@@ -61,7 +61,6 @@ Example:
 
 ```yaml
 speedups:
-  parallel_assignment: false
   rescue_vs_respond_to: true
   module_eval: true
   shuffle_first_vs_sample: true
