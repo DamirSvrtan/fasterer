@@ -21,6 +21,9 @@ module Fasterer
 
       module_eval:
         'Using module_eval is slower than define_method',
+      
+      length_vs_size_vs_count:
+        'Array#count is slower than Array#length (Array#size is an alias)',
 
       shuffle_first_vs_sample:
         'Array#shuffle.first is slower than Array#sample',

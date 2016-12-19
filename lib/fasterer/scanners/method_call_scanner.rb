@@ -29,6 +29,8 @@ module Fasterer
         check_sort_offense
       when :each_with_index
         check_each_with_index_offense
+      when :count
+        check_count_offence
       when :first
         check_first_offense
       when :each
@@ -74,6 +76,13 @@ module Fasterer
 
     def check_each_with_index_offense
       add_offense(:each_with_index_vs_while)
+    end
+
+    def check_count_offence
+      if method_call.arguments.empty? && !method_call.has_block? &&
+          method_call.receiver.respond_to?(:array?) && method_call.receiver.array?
+        add_offense(:length_vs_size_vs_count)
+      end
     end
 
     def check_first_offense
