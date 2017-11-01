@@ -11,11 +11,6 @@ require 'pry'
 
 Dir["#{File.dirname(__FILE__)}/support/*.rb"].each { |f| require f }
 
-if ENV['TRAVIS']
-  require 'codeclimate-test-reporter'
-  CodeClimate::TestReporter.start
-end
-
 def RSpec.root
   @root_path = Pathname.new(File.dirname(__FILE__))
 end
