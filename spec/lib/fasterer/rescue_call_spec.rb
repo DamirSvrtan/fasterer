@@ -16,7 +16,7 @@ describe Fasterer::RescueCall do
     let(:file_name) { 'plain_rescue.rb' }
 
     it 'should detect constant' do
-      expect(rescue_call.rescue_classes).to eq([])
+      expect(rescue_call.rescue_classes).to eq(Sexp.new())
     end
   end
 
@@ -24,7 +24,7 @@ describe Fasterer::RescueCall do
     let(:file_name) { 'rescue_with_class.rb' }
 
     it 'should detect integer' do
-      expect(rescue_call.rescue_classes).to eq([:NoMethodError])
+      expect(rescue_call.rescue_classes).to eq(Sexp.new(:NoMethodError))
     end
   end
 
@@ -32,7 +32,7 @@ describe Fasterer::RescueCall do
     let(:file_name) { 'rescue_with_class_and_variable.rb' }
 
     it 'should detect string' do
-      expect(rescue_call.rescue_classes).to eq([:NoMethodError])
+      expect(rescue_call.rescue_classes).to eq(Sexp.new(:NoMethodError))
     end
   end
 
@@ -40,7 +40,7 @@ describe Fasterer::RescueCall do
     let(:file_name) { 'rescue_with_variable.rb' }
 
     it 'should detect variable' do
-      expect(rescue_call.rescue_classes).to eq([])
+      expect(rescue_call.rescue_classes).to eq(Sexp.new())
     end
   end
 
@@ -48,7 +48,7 @@ describe Fasterer::RescueCall do
     let(:file_name) { 'rescue_with_multiple_classes.rb' }
 
     it 'should detect method' do
-      expect(rescue_call.rescue_classes).to eq([:NoMethodError, :StandardError])
+      expect(rescue_call.rescue_classes).to eq(Sexp.new(:NoMethodError, :StandardError))
     end
   end
 
@@ -56,7 +56,7 @@ describe Fasterer::RescueCall do
     let(:file_name) { 'rescue_with_multiple_classes_and_variable.rb' }
 
     it 'should detect method' do
-      expect(rescue_call.rescue_classes).to eq([:NoMethodError, :StandardError])
+      expect(rescue_call.rescue_classes).to eq(Sexp.new(:NoMethodError, :StandardError))
     end
   end
 end
