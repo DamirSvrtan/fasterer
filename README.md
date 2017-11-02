@@ -30,8 +30,7 @@ fasterer
 
 ## Example output
 
-```shell
-
+```
 app/models/post.rb
 Array#select.first is slower than Array#detect. Occurred at lines: 57, 61.
 
