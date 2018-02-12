@@ -7,7 +7,9 @@ end
 
 require 'fasterer'
 require 'fasterer/cli'
+require 'fasterer/offense_list'
 require 'pry'
+require 'rspec-benchmark'
 
 Dir["#{File.dirname(__FILE__)}/support/*.rb"].each { |f| require f }
 
@@ -16,6 +18,8 @@ def RSpec.root
 end
 
 RSpec.configure do |config|
+  config.include RSpec::Benchmark::Matchers
+
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
