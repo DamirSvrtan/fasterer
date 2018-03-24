@@ -115,6 +115,10 @@ module Fasterer
     def value
       @value ||= @element[1]
     end
+
+    def constant?
+      value.frozen?
+    end
   end
 
   class Primitive
