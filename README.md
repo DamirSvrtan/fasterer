@@ -84,6 +84,25 @@ exclude_paths:
   - 'db/schema.rb'
 ```
 
+## Integrations
+
+These 3rd-party integrations enable you to run `fasterer` automatically
+as part of a larger framework.
+
+* https://github.com/jumanjihouse/pre-commit-hooks
+
+  This integration allows to use `fasterer` as either a pre-commit hook or within CI.
+  It uses the https://pre-commit.com/ framework for managing and maintaining
+  multi-language pre-commit hooks.
+
+* https://github.com/prontolabs/pronto-fasterer
+
+  Pronto runner for Fasterer, speed improvements suggester.
+  [Pronto](https://github.com/mmozuras/pronto) also integrates via
+  [danger-pronto](https://github.com/RestlessThinker/danger-pronto) into the
+  [danger](https://github.com/danger/danger) framework for pull requests
+  on Github, Gitlab, and BitBucket.
+
 ## Speedups TODO:
 
 4. find vs bsearch
