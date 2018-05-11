@@ -1,4 +1,5 @@
 require 'yaml'
+require 'homecoming'
 
 module Fasterer
   class Config
@@ -18,12 +19,16 @@ module Fasterer
 
     def file
       @file ||= begin
-        return nil_file unless File.exist?(FILE_NAME)
+        return nil_file if file_location.nil?
         # Yaml.load_file returns false if the content is blank
-        loaded = YAML.load_file(FILE_NAME) || nil_file
+        loaded = YAML.load_file(file_location) || nil_file
         # if the loaded file misses any of the two keys.
         loaded.merge!(nil_file) { |_k, v1, v2| v1 || v2 }
       end
+    end
+
+    def file_location
+      @file_location ||= Homecoming.find(FILE_NAME).last
     end
 
     def nil_file

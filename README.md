@@ -48,7 +48,8 @@ Use tr instead of gsub when grepping plain strings. Occurred at lines: 161.
 ```
 ## Configuration
 
-Configuration is done through the **.fasterer.yml** file placed in the root of your project.
+Configuration is done through the **.fasterer.yml** file. This can placed in the root of your 
+project, or any ancestor folder.
 
 Options:
 
