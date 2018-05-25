@@ -1,5 +1,5 @@
 require 'pathname'
-require 'colorize'
+require 'pastel'
 require 'English'
 
 require_relative 'analyzer'
@@ -79,8 +79,12 @@ module Fasterer
       @root_dir ||= Pathname('.')
     end
 
+    def pastel
+      @pastel ||= ::Pastel.new
+    end
+
     def output(analyzer)
-      puts analyzer.file_path.colorize(:red)
+      puts pastel.red(analyzer.file_path)
 
       offenses_grouped_by_type(analyzer).each do |error_group_name, error_occurences|
         puts "#{Fasterer::Offense::EXPLANATIONS[error_group_name]}."\
@@ -112,7 +116,7 @@ module Fasterer
     end
 
     def output_unable_to_find_file(path)
-      puts "No such file or directory - #{path}".colorize(:red)
+      puts pastel.red("No such file or directory - #{path}")
     end
 
     def ignored_speedups
@@ -150,19 +154,16 @@ module Fasterer
     end
 
     def inspected_files_output
-      "#{@files_inspected_count} #{pluralize(@files_inspected_count, 'file')} inspected"
-        .colorize(:green)
+      pastel.green("#{@files_inspected_count} #{pluralize(@files_inspected_count, 'file')} inspected")
     end
 
     def offenses_found_output
-      "#{@offenses_found_count} #{pluralize(@offenses_found_count, 'offense')} detected"
-        .colorize(:red)
+      pastel.red("#{@offenses_found_count} #{pluralize(@offenses_found_count, 'offense')} detected")
     end
 
     def unparsable_files_output
       return if @unparsable_files_count.zero?
-      "#{@unparsable_files_count} unparsable #{pluralize(@unparsable_files_count, 'file')} found"
-        .colorize(:red)
+      pastel.red("#{@unparsable_files_count} unparsable #{pluralize(@unparsable_files_count, 'file')} found")
     end
 
     def pluralize(n, singular, plural = nil)
@@ -173,6 +174,12 @@ module Fasterer
       else
         "#{singular}s"
       end
+    end
+
+    private
+
+    def pastel
+      @pastel ||= ::Pastel.new
     end
   end
 end
