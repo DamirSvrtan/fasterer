@@ -6,7 +6,8 @@ require 'fasterer/parser'
 require 'fasterer/scanners/method_call_scanner'
 require 'fasterer/scanners/rescue_call_scanner'
 require 'fasterer/scanners/method_definition_scanner'
-
+require 'fasterer/ignore_comment'
+require 'byebug'
 module Fasterer
   class Analyzer
     attr_reader :file_path
@@ -26,14 +27,19 @@ module Fasterer
       @errors ||= Fasterer::OffenseCollector.new
     end
 
+    def comment
+      @comment ||= Fasterer::IgnoreComment.new
+    end
+
     private
 
     def traverse_sexp_tree(sexp_tree)
       return unless sexp_tree.is_a?(Sexp)
 
       token = sexp_tree.first
-
       scan_by_token(token, sexp_tree)
+
+      comment.new_comment(sexp_tree.comments) if token == :defn
 
       case token
       when :call, :iter
@@ -44,6 +50,8 @@ module Fasterer
       else
         sexp_tree.each { |element| traverse_sexp_tree(element) }
       end
+
+      comment.reset_comment if token == :defn
     end
 
     def scan_by_token(token, element)
@@ -61,7 +69,7 @@ module Fasterer
 
     def scan_method_definitions(element)
       method_definition_scanner = MethodDefinitionScanner.new(element)
-
+      
       if method_definition_scanner.offense_detected?
         errors.push(method_definition_scanner.offense)
       end
@@ -83,7 +91,7 @@ module Fasterer
       rescue_call_scanner = RescueCallScanner.new(element)
 
       if rescue_call_scanner.offense_detected?
-        errors.push(rescue_call_scanner.offense)
+        errors.push(rescue_call_scanner.offense) unless comment.ignored?(rescue_call_scanner.offense.offense_name)
       end
     end
   end
