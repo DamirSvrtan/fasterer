@@ -7,7 +7,7 @@ require 'fasterer/scanners/method_call_scanner'
 require 'fasterer/scanners/rescue_call_scanner'
 require 'fasterer/scanners/method_definition_scanner'
 require 'fasterer/ignore_comment'
-require 'byebug'
+
 module Fasterer
   class Analyzer
     attr_reader :file_path
