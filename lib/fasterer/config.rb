@@ -30,7 +30,7 @@ module Fasterer
     def file_location
       @file_location ||=
         Pathname(Dir.pwd)
-        .ascend
+        .enum_for(:ascend)
         .map { |dir| File.join(dir.to_s, FILE_NAME) }
         .find { |f| File.exist?(f) }
     end
