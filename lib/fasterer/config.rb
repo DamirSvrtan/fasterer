@@ -1,5 +1,5 @@
 require 'yaml'
-require 'homecoming'
+require 'pathname'
 
 module Fasterer
   class Config
@@ -28,7 +28,11 @@ module Fasterer
     end
 
     def file_location
-      @file_location ||= Homecoming.find(FILE_NAME).last
+      @file_location ||=
+        Pathname(Dir.pwd)
+        .ascend
+        .map { |dir| File.join(dir.to_s, FILE_NAME) }
+        .find { |f| File.exist?(f) }
     end
 
     def nil_file
