@@ -11,6 +11,7 @@ rvm:
 - 2.3.0
 - 2.4.0
 - 2.5.0
+- 2.6.0
 env:
   global:
     secure: MBTxmpWCjrsNKPlOoFwJUMHze3GPMz8YCXQFQG3zJBh3WGNQnz4z91ra/1P/DClyVCxHGSFCOswxCNe4kJ2zAnPyQLqGSinXy9uDpqZQUEdaRoQbPnh4/bguZNSJ429gtTpMdDSNOgQ+Hra2EFnWwHA+rLF6ImksMsu3XGKGxGE=
