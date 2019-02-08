@@ -1,7 +1,5 @@
 language: ruby
 before_install:
-  # Travis bundler versions are quite out of date and can cause install errors
-  # see: https://github.com/rubygems/rubygems/issues/1419
   - gem update bundler
 rvm:
 - 1.9.3
@@ -15,3 +13,12 @@ rvm:
 env:
   global:
     secure: MBTxmpWCjrsNKPlOoFwJUMHze3GPMz8YCXQFQG3zJBh3WGNQnz4z91ra/1P/DClyVCxHGSFCOswxCNe4kJ2zAnPyQLqGSinXy9uDpqZQUEdaRoQbPnh4/bguZNSJ429gtTpMdDSNOgQ+Hra2EFnWwHA+rLF6ImksMsu3XGKGxGE=
+    - CC_TEST_REPORTER_ID=86c5edffe4c38e16cb1467e3220a4f3dfa0a0ac8fa6ee8fddd62e200245f4b77
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script:
+  - bundle exec rspec
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
