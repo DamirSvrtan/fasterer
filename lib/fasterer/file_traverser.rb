@@ -80,11 +80,31 @@ module Fasterer
     end
 
     def output(analyzer)
+      if display["by_lines"]
+        output_by_lines analyzer
+      else
+        output_default analyzer
+      end
+    end
+
+    def output_by_lines analyzer
+      offenses_grouped_by_type(analyzer).each do |error_group_name, error_occurences|
+        error_occurences.map(&:line_number).each do |line|
+          puts "#{analyzer.file_path.colorize(:red)}"\
+               ":#{line.to_s.colorize(:red)}"\
+               " #{Fasterer::Offense::EXPLANATIONS[error_group_name]}."
+        end
+      end
+
+      puts
+    end
+
+    def output_default analyzer
       puts analyzer.file_path.colorize(:red)
 
       offenses_grouped_by_type(analyzer).each do |error_group_name, error_occurences|
         puts "#{Fasterer::Offense::EXPLANATIONS[error_group_name]}."\
-             " Occurred at lines: #{error_occurences.map(&:line_number).join(', ')}."
+              " Occurred at lines: #{error_occurences.map(&:line_number).join(', ')}."
       end
 
       puts
@@ -113,6 +133,10 @@ module Fasterer
 
     def output_unable_to_find_file(path)
       puts "No such file or directory - #{path}".colorize(:red)
+    end
+
+    def display
+      config.display
     end
 
     def ignored_speedups
