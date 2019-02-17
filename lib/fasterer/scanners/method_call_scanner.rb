@@ -43,6 +43,8 @@ module Fasterer
         check_last_offense
       when :include?
         check_range_include_offense
+      when :find
+        check_find_offense
       end
     end
 
@@ -158,6 +160,12 @@ module Fasterer
     def check_range_include_offense
       if method_call.receiver.is_a?(Primitive) && method_call.receiver.range?
         add_offense(:include_vs_cover_on_range)
+      end
+    end
+
+    def check_find_offense
+      if method_call.has_block?
+        add_offense(:find_vs_bsearch)
       end
     end
   end
