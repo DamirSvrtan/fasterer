@@ -3,8 +3,13 @@ require 'yaml'
 module Fasterer
   class Config
     FILE_NAME         = '.fasterer.yml'
+    DISPLAY_KEY       = 'display'
     SPEEDUPS_KEY      = 'speedups'
     EXCLUDE_PATHS_KEY = 'exclude_paths'
+
+    def display
+      @display ||= file[DISPLAY_KEY]
+    end
 
     def ignored_speedups
       @ignored_speedups ||=
@@ -27,7 +32,7 @@ module Fasterer
     end
 
     def nil_file
-      { SPEEDUPS_KEY => {}, EXCLUDE_PATHS_KEY => [] }
+      { DISPLAY_KEY => {}, SPEEDUPS_KEY => {}, EXCLUDE_PATHS_KEY => [] }
     end
   end
 end

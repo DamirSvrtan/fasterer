@@ -58,6 +58,9 @@ Example:
 
 
 ```yaml
+display:
+  by_lines: false
+  
 speedups:
   rescue_vs_respond_to: true
   module_eval: true
