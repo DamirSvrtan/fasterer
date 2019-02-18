@@ -13,7 +13,7 @@ module Fasterer
 
     attr_reader :config
     attr_reader :parse_error_paths
-    attr_accessor :offenses_total_count
+    attr_reader :offenses_total_count
 
     def initialize(path)
       @path = Pathname(path || '.')
