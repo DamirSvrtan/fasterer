@@ -42,8 +42,6 @@ module Fasterer
 
     private
 
-    attr_accessor :offenses_found
-
     def traverse_files
       if @path.exist?
         scannable_files.each { |ruby_file| scan_file(ruby_file) }
@@ -60,8 +58,8 @@ module Fasterer
     else
       if offenses_grouped_by_type(analyzer).any?
         output(analyzer)
-        self.offenses_found = true
-        self.offenses_total_count += analyzer.errors.count
+        @offenses_found = true
+        @offenses_total_count += analyzer.errors.count
       end
     end
 
