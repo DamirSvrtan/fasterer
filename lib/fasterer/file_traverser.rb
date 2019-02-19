@@ -33,7 +33,7 @@ module Fasterer
     end
 
     def offenses_found?
-      offenses_found
+      @offenses_found
     end
 
     def scannable_files
