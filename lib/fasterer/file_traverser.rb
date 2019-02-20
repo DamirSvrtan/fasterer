@@ -20,6 +20,7 @@ module Fasterer
       @parse_error_paths = []
       @config = Config.new
       @offenses_total_count = 0
+      @offenses_found = false
     end
 
     def traverse
@@ -33,7 +34,7 @@ module Fasterer
     end
 
     def offenses_found?
-      !!@offenses_found
+      @offenses_found
     end
 
     def scannable_files
