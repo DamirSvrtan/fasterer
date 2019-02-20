@@ -336,7 +336,7 @@ describe Fasterer::FileTraverser do
   end
 
   describe 'output' do
-    let(:test_file_path) {RSpec.root.join('support', 'output', 'output.rb')}
+    let(:test_file_path) {RSpec.root.join('support', 'output', 'sample_code.rb')}
     let(:analyzer) {Fasterer::Analyzer.new(test_file_path)}
     let(:file_traverser) {Fasterer::FileTraverser.new('.')}
 
