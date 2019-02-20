@@ -82,13 +82,13 @@ module Fasterer
     def output(analyzer)
       offenses_grouped_by_type(analyzer).each do |error_group_name, error_occurences|
         error_occurences.map(&:line_number).each do |line|
-          puts "#{analyzer.file_path.colorize(:red)}"\
-               ":#{line.to_s.colorize(:red)}"\
-               " #{Fasterer::Offense::EXPLANATIONS[error_group_name]}."
+          print "#{analyzer.file_path}"\
+               ":#{line.to_s}"\
+               " #{Fasterer::Offense::EXPLANATIONS[error_group_name]}.\n"
         end
       end
 
-      puts
+      print "\n"
     end
 
     def offenses_grouped_by_type(analyzer)
