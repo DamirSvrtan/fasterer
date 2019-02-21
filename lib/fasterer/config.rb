@@ -8,7 +8,7 @@ module Fasterer
 
     def ignored_speedups
       @ignored_speedups ||=
-        file[SPEEDUPS_KEY].select { |_, value| !value}.keys.map(&:to_sym)
+        file[SPEEDUPS_KEY].select { |_, value| !value }.keys.map(&:to_sym)
     end
 
     def ignored_files
