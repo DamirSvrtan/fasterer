@@ -13,13 +13,14 @@ module Fasterer
 
     attr_reader :config
     attr_reader :parse_error_paths
-    attr_accessor :offenses_total_count
+    attr_reader :offenses_total_count
 
     def initialize(path)
       @path = Pathname(path || '.')
       @parse_error_paths = []
       @config = Config.new
       @offenses_total_count = 0
+      @offenses_found = false
     end
 
     def traverse
@@ -33,7 +34,7 @@ module Fasterer
     end
 
     def offenses_found?
-      !!offenses_found
+      @offenses_found
     end
 
     def scannable_files
@@ -41,8 +42,6 @@ module Fasterer
     end
 
     private
-
-    attr_accessor :offenses_found
 
     def traverse_files
       if @path.exist?
@@ -60,8 +59,8 @@ module Fasterer
     else
       if offenses_grouped_by_type(analyzer).any?
         output(analyzer)
-        self.offenses_found = true
-        self.offenses_total_count += analyzer.errors.count
+        @offenses_found = true
+        @offenses_total_count += analyzer.errors.count
       end
     end
 
