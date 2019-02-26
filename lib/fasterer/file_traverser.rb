@@ -11,9 +11,9 @@ module Fasterer
     SPEEDUPS_KEY      = Config::SPEEDUPS_KEY
     EXCLUDE_PATHS_KEY = Config::EXCLUDE_PATHS_KEY
 
-    attr_reader :config
-    attr_reader :parse_error_paths
-    attr_accessor :offenses_total_count
+    attr_reader :config,
+                :parse_error_paths,
+                :offenses_total_count
 
     def initialize(path)
       @path = Pathname(path || '.')
@@ -33,7 +33,7 @@ module Fasterer
     end
 
     def offenses_found?
-      !!offenses_found
+      !!@offenses_found
     end
 
     def scannable_files
@@ -41,8 +41,6 @@ module Fasterer
     end
 
     private
-
-    attr_accessor :offenses_found
 
     def traverse_files
       if @path.exist?
@@ -56,12 +54,12 @@ module Fasterer
       analyzer = Analyzer.new(path)
       analyzer.scan
     rescue RubyParser::SyntaxError, Racc::ParseError, Timeout::Error => e
-      parse_error_paths.push(ErrorData.new(path, e.class, e.message).to_s)
+      @parse_error_paths.push(ErrorData.new(path, e.class, e.message).to_s)
     else
       if offenses_grouped_by_type(analyzer).any?
         output(analyzer)
-        self.offenses_found = true
-        self.offenses_total_count += analyzer.errors.count
+        @offenses_found = true
+        @offenses_total_count += analyzer.errors.count
       end
     end
 
