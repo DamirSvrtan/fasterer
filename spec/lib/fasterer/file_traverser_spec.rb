@@ -334,4 +334,24 @@ describe Fasterer::FileTraverser do
         .to match_array(['user.rb - RubyParser::SyntaxError - unterminated string meets end of file. near line 1: ""'])
     end
   end
+
+  describe 'output' do
+    let(:test_file_path) { RSpec.root.join('support', 'output', 'sample_code.rb') }
+    let(:analyzer) { Fasterer::Analyzer.new(test_file_path) }
+    let(:file_traverser) { Fasterer::FileTraverser.new('.') }
+
+    before do
+      analyzer.scan
+    end
+
+    context "when print offenses" do
+      let(:explanation) { Fasterer::Offense::EXPLANATIONS[:for_loop_vs_each] }
+
+      it 'should print offense' do
+        match = "#{test_file_path}:1 #{explanation}.\n\n"
+
+        expect { file_traverser.send(:output, analyzer) }.to output(match).to_stdout
+      end
+    end
+  end
 end
