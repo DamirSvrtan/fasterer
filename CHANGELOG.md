@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.0
+
+- New style of outputting offenses: `spec/support/output/sample_code.rb:1 For loop is slower than using each.`
+
 ## 0.4.1
 - Upgrade ruby parser version to 3.11.0 (to stop warnings)
 
