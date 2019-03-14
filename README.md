@@ -30,20 +30,17 @@ fasterer
 ## Example output
 
 ```
-app/models/post.rb
-Array#select.first is slower than Array#detect. Occurred at lines: 57, 61.
+app/models/post.rb:57 Array#select.first is slower than Array#detect.
+app/models/post.rb:61 Array#select.first is slower than Array#detect.
 
-db/seeds/cities.rb
-Hash#keys.each is slower than Hash#each_key. Occurred at lines: 15, 33.
+db/seeds/cities.rb:15 Hash#keys.each is slower than Hash#each_key.
+db/seeds/cities.rb:33 Hash#keys.each is slower than Hash#each_key.
 
-test/options_test.rb
-Hash#merge! with one argument is slower than Hash#[]. Occurred at lines: 84.
+test/options_test.rb:84 Hash#merge! with one argument is slower than Hash#[].
 
-test/module_test.rb
-Don't rescue NoMethodError, rather check with respond_to?. Occurred at lines: 272.
+test/module_test.rb:272 Don't rescue NoMethodError, rather check with respond_to?.
 
-spec/cache/mem_cache_store_spec.rb
-Use tr instead of gsub when grepping plain strings. Occurred at lines: 161.
+spec/cache/mem_cache_store_spec.rb:161 Use tr instead of gsub when grepping plain strings.
 ```
 ## Configuration
 
