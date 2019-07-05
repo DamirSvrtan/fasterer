@@ -44,7 +44,8 @@ spec/cache/mem_cache_store_spec.rb:161 Use tr instead of gsub when grepping plai
 ```
 ## Configuration
 
-Configuration is done through the **.fasterer.yml** file placed in the root of your project.
+Configuration is done through the **.fasterer.yml** file. This can placed in the root of your 
+project, or any ancestor folder.
 
 Options:
 
