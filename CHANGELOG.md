@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0
+
+- Enable placing the `.fasterer.yml` file not just in the current dir, but in any parent directory as well.
+
 ## 0.5.1
 
 - Upgrade to ruby_parser 3.13.0 that fully supports Ruby 2.6
