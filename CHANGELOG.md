@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0
+
+- More inclusive `check_symbol_to_proc` rule - don't only look at #each but any method that could leverage the symbol to proc rule. Merged through [#41](https://github.com/DamirSvrtan/fasterer/pull/41)
+
 ## 0.6.0
 
 - Enable placing the `.fasterer.yml` file not just in the current dir, but in any parent directory as well.
