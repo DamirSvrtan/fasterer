@@ -44,6 +44,8 @@ module Fasterer
       when :include?
         check_range_include_offense
       end
+
+      check_symbol_to_proc
     end
 
     def check_module_eval_offense
@@ -98,8 +100,6 @@ module Fasterer
       when :keys
         add_offense(:keys_each_vs_each_key)
       end
-
-      check_symbol_to_proc
     end
 
     def check_flatten_offense
