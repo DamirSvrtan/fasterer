@@ -43,6 +43,8 @@ module Fasterer
         check_last_offense
       when :include?
         check_range_include_offense
+      when :count
+        check_count_offense
       end
 
       check_symbol_to_proc
@@ -116,6 +118,12 @@ module Fasterer
     def check_fetch_offense
       if method_call.arguments.count == 2 && !method_call.has_block?
         add_offense(:fetch_with_argument_vs_block)
+      end
+    end
+
+    def check_count_offense
+      if method_call.arguments.count == 0 || !method_call.has_block?
+        add_offense(:count_vs_length)
       end
     end
 
