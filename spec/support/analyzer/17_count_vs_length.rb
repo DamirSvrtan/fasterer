@@ -1,5 +1,9 @@
 ARRAY = [*1..100]
 
-ARRAY.count
-ARRAY.count(2)
-ARRAY.length
+def slow
+  ARRAY.count
+end
+
+def fast
+  ARRAY.length
+end
