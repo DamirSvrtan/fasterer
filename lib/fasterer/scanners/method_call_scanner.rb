@@ -122,7 +122,7 @@ module Fasterer
     end
 
     def check_count_offense
-      if method_call.arguments.count == 0 || !method_call.has_block?
+      if method_call.arguments.count == 0 && !method_call.has_block?
         add_offense(:count_vs_length)
       end
     end
