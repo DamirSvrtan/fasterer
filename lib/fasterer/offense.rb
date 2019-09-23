@@ -71,10 +71,7 @@ module Fasterer
         'Use attr_writer for writing to ivars',
 
       include_vs_cover_on_range:
-        'Use #cover? instead of #include? on ranges',
-
-      count_vs_length:
-        'Array#count with no arguments is slower than Array#length'
+        'Use #cover? instead of #include? on ranges'
     }
   end
 end
