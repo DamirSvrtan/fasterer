@@ -34,3 +34,6 @@ numbers.each { |number| number.to_s }
 numbers.map { |number| number.to_s }
 numbers.any? { |number| number.even? }
 numbers.find { |number| number.even? }
+
+instance_eval { |_| method_call_without_receiver }
+instance_eval { |object| object.to_s }
