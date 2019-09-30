@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1
+
+- Fix `check_symbol_to_proc` rule from crashing when there is no receiver [#67](https://github.com/DamirSvrtan/fasterer/pull/67)
+
 ## 0.7.0
 
 - More inclusive `check_symbol_to_proc` rule - don't only look at #each but any method that could leverage the symbol to proc rule. Merged through [#41](https://github.com/DamirSvrtan/fasterer/pull/41)
