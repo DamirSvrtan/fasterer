@@ -37,3 +37,8 @@ numbers.find { |number| number.even? }
 
 instance_eval { |_| method_call_without_receiver }
 instance_eval { |object| object.to_s }
+
+['foo'].map { |string| +string }
+['foo'].map { |string| -string }
+[true].map { |boolean| !boolean }
+[1, 2, 3].map { |number| ~number }

@@ -119,6 +119,8 @@ module Fasterer
       end
     end
 
+    UNARY_METHODS = %i[+@ -@ ! ~].freeze
+
     # Need to refactor, fukken complicated conditions.
     def check_symbol_to_proc
       return unless method_call.block_argument_names.count == 1
@@ -128,6 +130,7 @@ module Fasterer
 
       body_method_call = MethodCall.new(method_call.block_body)
 
+      return if UNARY_METHODS.include?(body_method_call.name)
       return unless body_method_call.arguments.count.zero?
       return if body_method_call.has_block?
       return if body_method_call.receiver.nil?
