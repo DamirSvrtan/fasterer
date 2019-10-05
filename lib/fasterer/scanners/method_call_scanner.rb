@@ -125,7 +125,6 @@ module Fasterer
       return if method_call.block_body.nil?
       return unless method_call.block_body.sexp_type == :call
       return if method_call.arguments.count > 0
-      return if method_call.lambda_literal?
 
       body_method_call = MethodCall.new(method_call.block_body)
 

@@ -32,10 +32,6 @@ module Fasterer
       call_element[3..-1] || []
     end
 
-    def lambda_literal?
-      call_element.sexp_type == :lambda
-    end
-
     private
 
     attr_reader :call_element
