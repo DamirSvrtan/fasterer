@@ -437,4 +437,36 @@ describe Fasterer::MethodCall do
       # expect(method_call.receiver.name).to eq('hi')
     end
   end
+
+  describe '#lambda_literal?' do
+    describe 'lambda literal without arguments' do
+      let(:code) { '-> {}' }
+
+      let(:call_element) { ripper }
+
+      it 'should be true' do
+        expect(method_call).to be_lambda_literal
+      end
+    end
+
+    describe 'lambda literal with an argument' do
+      let(:code) { '->(_) {}' }
+
+      let(:call_element) { ripper }
+
+      it 'should be true' do
+        expect(method_call).to be_lambda_literal
+      end
+    end
+
+    describe 'lambda method' do
+      let(:code) { 'lambda {}' }
+
+      let(:call_element) { ripper }
+
+      it 'should be false' do
+        expect(method_call).not_to be_lambda_literal
+      end
+    end
+  end
 end
