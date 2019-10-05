@@ -330,8 +330,8 @@ describe Fasterer::FileTraverser do
     let(:file_traverser) { Fasterer::FileTraverser.new('.') }
 
     it 'should have errors' do
-      expect(file_traverser.parse_error_paths)
-        .to match_array(['user.rb - RubyParser::SyntaxError - unterminated string meets end of file. near line 1: ""'])
+      expect(file_traverser.parse_error_paths.first)
+        .to start_with('user.rb - RubyParser::SyntaxError - unterminated')
     end
   end
 
