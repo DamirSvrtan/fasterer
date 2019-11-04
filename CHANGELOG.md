@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.0
+
+- Dropped support for ruby versions below 2.2.0 and locks ruby_parser to be above or equal to 1.14.1. The new ruby_parser version 1.14.1 explicitly [requires ruby versions above 2.2.0](https://github.com/seattlerb/ruby_parser/issues/298#issuecomment-539795933), so this affects fasterer as well.
+
 ## 0.7.1
 
 - Fix `check_symbol_to_proc` rule from crashing when there is no receiver [#67](https://github.com/DamirSvrtan/fasterer/pull/67)
