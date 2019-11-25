@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1
+
+- Ignore lambda literals when checking symbol to proc. Thanks to [kiyot](https://github.com/kiyot) for his fix in PR [#74](https://github.com/DamirSvrtan/fasterer/pull/74).
+
 ## 0.8.0
 
 - Dropped support for ruby versions below 2.2.0 and locks ruby_parser to be above or equal to 1.14.1. The new ruby_parser version 1.14.1 explicitly [requires ruby versions above 2.2.0](https://github.com/seattlerb/ruby_parser/issues/298#issuecomment-539795933), so this affects fasterer as well.
