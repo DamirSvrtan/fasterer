@@ -43,6 +43,8 @@ module Fasterer
         check_last_offense
       when :include?
         check_range_include_offense
+      when :count
+        check_count_offense
       end
 
       check_symbol_to_proc
@@ -161,6 +163,13 @@ module Fasterer
       if method_call.receiver.is_a?(Primitive) && method_call.receiver.range?
         add_offense(:include_vs_cover_on_range)
       end
+    end
+
+    def check_count_offense
+      return if method_call.arguments.size > 0
+      return if method_call.has_block?
+
+      add_offense(:count_vs_size)
     end
   end
 end
