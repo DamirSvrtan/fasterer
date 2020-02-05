@@ -11,6 +11,10 @@ route_sets.each do |route|
   puts route.name
 end
 
+route_sets.each do |routes|
+  [].finalize!
+end
+
 route_sets.each(&:finalize!)
 
 route_sets.each(:oppa) do |route|
