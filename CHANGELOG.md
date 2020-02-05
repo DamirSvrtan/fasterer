@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.2
+
+- Fixes [#77](https://github.com/DamirSvrtan/fasterer/issues/77). An error occurs on the symbol to proc check when somebody invokes a method with no arguments on an array or range inside of the inspected block. Seems like a bug in the inspected code, but nevertheless it is a code path we need to support.
+
 ## 0.8.1
 
 - Ignore lambda literals when checking symbol to proc. Thanks to [kiyot](https://github.com/kiyot) for his fix in PR [#74](https://github.com/DamirSvrtan/fasterer/pull/74).
