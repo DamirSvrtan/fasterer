@@ -345,7 +345,7 @@ describe Fasterer::FileTraverser do
     end
 
     context "when print offenses" do
-      let(:explanation) { Fasterer::Offense.new(:for_loop_vs_each, 0).explanation }
+      let(:explanation) { Fasterer::Explanation.new(:for_loop_vs_each).call }
 
       it 'should print offense' do
         match = "\e[0;31;49m#{test_file_path}:1\e[0m #{explanation}\n\n"
