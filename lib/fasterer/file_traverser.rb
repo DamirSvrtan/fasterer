@@ -155,7 +155,7 @@ module Fasterer
     end
 
     def offenses_found_output
-      color = @offenses_found_count.zero? :green : :red
+      color = @offenses_found_count.zero? ? :green : :red
       "#{@offenses_found_count} #{pluralize(@offenses_found_count, 'offense')} detected"
         .colorize(color)
     end
