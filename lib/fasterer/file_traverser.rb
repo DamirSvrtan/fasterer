@@ -155,12 +155,14 @@ module Fasterer
     end
 
     def offenses_found_output
+      color = @offenses_found_count.zero? :green : :red
       "#{@offenses_found_count} #{pluralize(@offenses_found_count, 'offense')} detected"
-        .colorize(:red)
+        .colorize(color)
     end
 
     def unparsable_files_output
       return if @unparsable_files_count.zero?
+
       "#{@unparsable_files_count} unparsable #{pluralize(@unparsable_files_count, 'file')} found"
         .colorize(:red)
     end
