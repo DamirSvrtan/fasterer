@@ -100,6 +100,10 @@ as part of a larger framework.
   [danger](https://github.com/danger/danger) framework for pull requests
   on Github, Gitlab, and BitBucket.
 
+* https://github.com/vk26/action-fasterer
+
+  Github-action for running fasterer via [reviewdog](https://github.com/reviewdog/reviewdog). Reviewdog provides a way to post review comments in pull requests.
+
 ## Speedups TODO:
 
 4. find vs bsearch
