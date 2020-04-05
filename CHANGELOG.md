@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.3
+
+- Merged in [#79](https://github.com/DamirSvrtan/fasterer/pull/79), a PR that makes sure the output is green when there are no failures.
+
 ## 0.8.2
 
 - Fixes [#77](https://github.com/DamirSvrtan/fasterer/issues/77). An error occurs on the symbol to proc check when somebody invokes a method with no arguments on an array or range inside of the inspected block. Seems like a bug in the inspected code, but nevertheless it is a code path we need to support.
