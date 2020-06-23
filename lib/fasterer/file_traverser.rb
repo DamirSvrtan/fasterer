@@ -1,5 +1,5 @@
 require 'pathname'
-require 'colorize'
+require 'rainbow'
 require 'English'
 
 require_relative 'analyzer'
@@ -83,7 +83,8 @@ module Fasterer
       offenses_grouped_by_type(analyzer).each do |error_group_name, error_occurences|
         error_occurences.map(&:line_number).each do |line|
           file_and_line = "#{analyzer.file_path}:#{line}"
-          print "#{file_and_line.colorize(:red)} #{Fasterer::Offense::EXPLANATIONS[error_group_name]}.\n"
+          # print "#{Rainbow(file_and_line).color(:red)} #{Fasterer::Offense::EXPLANATIONS[error_group_name]}.\n"
+          print "#{Rainbow(file_and_line).color(:red)} #{Fasterer::Offense::EXPLANATIONS[error_group_name]}.\n"
         end
       end
 
@@ -112,7 +113,7 @@ module Fasterer
     end
 
     def output_unable_to_find_file(path)
-      puts "No such file or directory - #{path}".colorize(:red)
+      puts Rainbow("No such file or directory - #{path}").color(:red)
     end
 
     def ignored_speedups
@@ -150,21 +151,21 @@ module Fasterer
     end
 
     def inspected_files_output
-      "#{@files_inspected_count} #{pluralize(@files_inspected_count, 'file')} inspected"
-        .colorize(:green)
+      Rainbow("#{@files_inspected_count} #{pluralize(@files_inspected_count, 'file')} inspected")
+        .color(:green)
     end
 
     def offenses_found_output
       color = @offenses_found_count.zero? ? :green : :red
-      "#{@offenses_found_count} #{pluralize(@offenses_found_count, 'offense')} detected"
-        .colorize(color)
+      Rainbow("#{@offenses_found_count} #{pluralize(@offenses_found_count, 'offense')} detected")
+        .color(color)
     end
 
     def unparsable_files_output
       return if @unparsable_files_count.zero?
 
-      "#{@unparsable_files_count} unparsable #{pluralize(@unparsable_files_count, 'file')} found"
-        .colorize(:red)
+      Rainbow("#{@unparsable_files_count} unparsable #{pluralize(@unparsable_files_count, 'file')} found")
+        .color(:red)
     end
 
     def pluralize(n, singular, plural = nil)
