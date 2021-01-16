@@ -29,7 +29,7 @@ module Fasterer
     end
 
     def arguments_element
-      call_element[3..-1] || []
+      call_element.sexp_body(3) || []
     end
 
     def lambda_literal?
