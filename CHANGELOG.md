@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.0
+
+- Ruby 3 support! Merged in [#85](https://github.com/DamirSvrtan/fasterer/pull/85), a PR that relaxed Ruby version constraints and added a minor change to support Ruby 3.0. Thanks to [swiknaba](https://github.com/swiknaba).
+
 ## 0.8.3
 
 - Merged in [#79](https://github.com/DamirSvrtan/fasterer/pull/79), a PR that makes sure the output is green when there are no failures.
