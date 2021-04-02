@@ -33,7 +33,7 @@ module Fasterer
     end
 
     def offenses_found?
-      !!offenses_found
+      !offenses_total_count.zero?
     end
 
     def scannable_files
@@ -41,8 +41,6 @@ module Fasterer
     end
 
     private
-
-    attr_accessor :offenses_found
 
     def traverse_files
       if @path.exist?
@@ -60,7 +58,6 @@ module Fasterer
     else
       if offenses_grouped_by_type(analyzer).any?
         output(analyzer)
-        self.offenses_found = true
         self.offenses_total_count += analyzer.errors.count
       end
     end
