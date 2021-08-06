@@ -39,6 +39,8 @@ module Fasterer
         check_fetch_offense
       when :merge!
         check_merge_bang_offense
+      when :update
+        check_update_offense
       when :last
         check_last_offense
       when :include?
@@ -146,6 +148,17 @@ module Fasterer
 
       if first_argument.element.drop(1).count == 2 # each key and value is an item by itself.
         add_offense(:hash_merge_bang_vs_hash_brackets)
+      end
+    end
+
+    def check_update_offense
+      return unless method_call.arguments.count == 1
+
+      first_argument = method_call.arguments.first
+      return unless first_argument.type == :hash
+
+      if first_argument.element.drop(1).count == 2 # each key and value is an item by itself.
+        add_offense(:hash_update_vs_hash_brackets)
       end
     end
 
