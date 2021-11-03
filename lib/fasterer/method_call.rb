@@ -9,6 +9,10 @@ module Fasterer
 
     alias_method :name, :method_name
 
+    # Defines CONSTANT_TYPES constant with the list of constant
+    # types like String, Nil, Integer, Symbol, Boolean or a Contant
+    PRIMITIVE_DATA_TYPES = %i[nil lit str const true false].freeze
+
     def initialize(element)
       @element = element
       set_call_element
@@ -22,6 +26,10 @@ module Fasterer
 
     def has_block?
       @block_present || false
+    end
+
+    def has_block_with_primitive_data_types?
+      has_block? && PRIMITIVE_DATA_TYPES.include?(@block_body.first)
     end
 
     def receiver_element
