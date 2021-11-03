@@ -114,7 +114,7 @@ module Fasterer
     end
 
     def check_fetch_offense
-      if method_call.arguments.count == 2 && !method_call.has_block?
+      if method_call.arguments.count == 1 && method_call.has_block?
         add_offense(:fetch_with_argument_vs_block)
       end
     end
