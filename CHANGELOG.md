@@ -1,5 +1,9 @@
 # Changelog
 
+## (not released yet) 0.10.0
+
+- Due to issues while setting up builds with Github Actions, I have dropped Ruby 2.2 support. It's EOL date was 2018-03-31, and I don't have the bandwidth to support deprecated Ruby versions. The only reason at this point why Ruby versions 2.3, 2.4 and 2.5 are supported is because they still work with other dependencies, so it's no effort currently to support them. Once they become issues, they'll probably be dropped.
+
 ## 0.9.0
 
 - Ruby 3 support! Merged in [#85](https://github.com/DamirSvrtan/fasterer/pull/85), a PR that relaxed Ruby version constraints and added a minor change to support Ruby 3.0. Thanks to [swiknaba](https://github.com/swiknaba).
