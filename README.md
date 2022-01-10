@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/DamirSvrtan/fasterer.svg?branch=master)](https://travis-ci.org/DamirSvrtan/fasterer)
+[![Build Status](https://github.com/DamirSvrtan/fasterer/actions/workflows/ruby.yml/badge.svg)
 [![Code Climate](https://codeclimate.com/github/DamirSvrtan/fasterer/badges/gpa.svg)](https://codeclimate.com/github/DamirSvrtan/fasterer)
 [![Gem Version](https://badge.fury.io/rb/fasterer.svg)](http://badge.fury.io/rb/fasterer)
 [![Test Coverage](https://codeclimate.com/github/DamirSvrtan/fasterer/badges/coverage.svg)](https://codeclimate.com/github/DamirSvrtan/fasterer/coverage)
