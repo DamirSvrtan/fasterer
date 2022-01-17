@@ -6,6 +6,7 @@ require 'fasterer/parser'
 require 'fasterer/scanners/method_call_scanner'
 require 'fasterer/scanners/rescue_call_scanner'
 require 'fasterer/scanners/method_definition_scanner'
+require 'fasterer/scanners/inline_speedup_scanner'
 
 module Fasterer
   class Analyzer
@@ -26,6 +27,10 @@ module Fasterer
       @errors ||= Fasterer::OffenseCollector.new
     end
 
+    def inline_speedup_scanner
+      @inline_speedup_scanner ||= Fasterer::InlineSpeedupScanner.new
+    end
+
     private
 
     def traverse_sexp_tree(sexp_tree)
@@ -33,7 +38,9 @@ module Fasterer
 
       token = sexp_tree.first
 
+      inline_speedup_scanner.scan(token)
       scan_by_token(token, sexp_tree)
+      filter_errors
 
       case token
       when :call, :iter
@@ -85,6 +92,10 @@ module Fasterer
       if rescue_call_scanner.offense_detected?
         errors.push(rescue_call_scanner.offense)
       end
+    end
+
+    def filter_errors
+      errors.reject { |err| inline_speedup_scanner.disabled_offense?(err) }
     end
   end
 end

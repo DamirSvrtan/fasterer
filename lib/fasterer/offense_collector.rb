@@ -12,6 +12,6 @@ module Fasterer
       @offenses.select { |offense| offense.name == offense_name }
     end
 
-    def_delegators :@offenses, :push, :any?, :each, :group_by, :count
+    def_delegators :@offenses, :push, :any?, :each, :group_by, :count, :reject
   end
 end
