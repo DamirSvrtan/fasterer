@@ -19,8 +19,10 @@ module Fasterer
     end
 
     def scan
+      inline_speedup_scanner.scan(@file_content)
       sexp_tree = Fasterer::Parser.parse(@file_content)
       traverse_sexp_tree(sexp_tree)
+      filter_inline_disabled_errors!
     end
 
     def errors
@@ -37,10 +39,7 @@ module Fasterer
       return unless sexp_tree.is_a?(Sexp)
 
       token = sexp_tree.first
-
-      inline_speedup_scanner.scan(token)
       scan_by_token(token, sexp_tree)
-      filter_errors
 
       case token
       when :call, :iter
@@ -94,8 +93,8 @@ module Fasterer
       end
     end
 
-    def filter_errors
-      errors.reject { |err| inline_speedup_scanner.disabled_offense?(err) }
+    def filter_inline_disabled_errors!
+      errors.reject! { |err| inline_speedup_scanner.disabled_offense?(err) }
     end
   end
 end

@@ -6,12 +6,14 @@ module Fasterer
       @store = {}
     end
 
-    def scan(token)
-      return unless (match_data = token&.match(COMMENT_REGEX))
+    def scan(file_content)
+      file_content.split("\n").each do |line|
+        next unless (match_data = line.match(COMMENT_REGEX))
 
-      status = match_data[:status]
-      @store[status] ||= []
-      save_offence(status, match_data[:offence])
+        status = match_data[:status]
+        @store[status] ||= []
+        save_offence(status, match_data[:offence])
+      end
     end
 
     def enabled_offense?(offence_name)
