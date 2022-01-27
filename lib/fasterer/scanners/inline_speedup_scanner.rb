@@ -12,21 +12,21 @@ module Fasterer
 
         status = match_data[:status]
         @store[status] ||= []
-        save_offence(status, match_data[:offence])
+        save_offense(status, match_data[:offence])
       end
     end
 
-    def enabled_offense?(offence_name)
-      @store.fetch(:enable, []).include?(offence_name)
+    def enabled_offense?(offense_name)
+      @store.fetch('enable', []).include?(offense_name.to_s)
     end
 
-    def disabled_offense?(offence_name)
-      @store.fetch(:disable, []).include?(offence_name)
+    def disabled_offense?(offense_name)
+      @store.fetch('disable', []).include?(offense_name.to_s)
     end
 
     private
 
-    def save_offence(status, offence)
+    def save_offense(status, offence)
       @store.each_key do |stored_status|
         next if stored_status == status
 

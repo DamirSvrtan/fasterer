@@ -6,6 +6,7 @@ describe Fasterer::Analyzer do
   let(:test_file_path) { RSpec.root.join('support', 'analyzer', '100_inline_speedups_spec.rb') }
   let!(:base_file_content) { File.read(test_file_path) }
   let(:analyzer) { Fasterer::Analyzer.new(test_file_path) }
+  let(:included_speedup_file_content) { File.read(speedup_file_path) }
 
   after { write_file(test_file_path, base_file_content) }
 
@@ -14,8 +15,7 @@ describe Fasterer::Analyzer do
     let(:disable_speedup_comment) { '# fasterer:disable for_loop_vs_each' }
 
     before do
-      content = File.read(speedup_file_path)
-      write_file(test_file_path, "#{disable_speedup_comment}\n#{content}")
+      write_file(test_file_path, "#{disable_speedup_comment}\n#{included_speedup_file_content}")
       analyzer.scan
     end
 

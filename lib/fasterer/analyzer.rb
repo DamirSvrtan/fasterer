@@ -94,7 +94,7 @@ module Fasterer
     end
 
     def filter_inline_disabled_errors!
-      errors.reject! { |err| inline_speedup_scanner.disabled_offense?(err) }
+      errors.reject! { |err| inline_speedup_scanner.disabled_offense?(err.offense_name) }
     end
   end
 end
