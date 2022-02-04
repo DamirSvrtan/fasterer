@@ -1,40 +1,63 @@
 module Fasterer
   class InlineSpeedupScanner
-    COMMENT_REGEX = /#\s*fasterer:(?<status>disable|enable) (?<offence>[a-z_]+)/
+    COMMENT_REGEX = /#\s*fasterer:(?<status>disable|enable) (?<speedup>[a-z_]+)/
 
     def initialize
       @store = {}
     end
 
     def scan(file_content)
-      file_content.split("\n").each do |line|
+      file_content.split("\n").each_with_index do |line, line_num|
         next unless (match_data = line.match(COMMENT_REGEX))
 
+        @current_line = line_num + 1 # line_num starts with zero
         status = match_data[:status]
         @store[status] ||= []
-        save_offense(status, match_data[:offence])
+        store_speedup(status, match_data[:speedup])
       end
     end
 
-    def enabled_offense?(offense_name)
-      @store.fetch('enable', []).include?(offense_name.to_s)
+    def enabled_speedup?(offense)
+      enabled_speedup = speedup_by_status_and_name('enable', offense.name.to_s)
+      return false unless enabled_speedup
+
+      enabled_speedup[:context].cover?(offense.line_number)
     end
 
-    def disabled_offense?(offense_name)
-      @store.fetch('disable', []).include?(offense_name.to_s)
+    def disabled_speedup?(offense)
+      disabled_speedup = speedup_by_status_and_name('disable', offense.name.to_s)
+      return false unless disabled_speedup
+
+      disabled_speedup[:context].cover?(offense.line_number)
     end
 
     private
 
-    def save_offense(status, offence)
-      @store.each_key do |stored_status|
-        next if stored_status == status
+    def store_speedup(status, speedup)
+      limit_saved_speedups_context(status, speedup)
 
-        @store[stored_status].reject! { |stored_offence| stored_offence == offence }
+      saved_speedup = speedup_by_status_and_name(status, speedup)
+      # Only unique status speedup available per file
+      return if saved_speedup
+
+      @store[status] << { name: speedup, context: (@current_line...) }
+    end
+
+    def limit_saved_speedups_context(status, speedup)
+      saved_speedup = speedup_by_status_and_name(opposite_status(status), speedup)
+      return unless saved_speedup
+
+      saved_speedup[:context] = saved_speedup[:context].first...@current_line
+    end
+
+    def opposite_status(status)
+      status == 'disable' ? 'enable' : 'disable'
+    end
+
+    def speedup_by_status_and_name(status, name)
+      @store.fetch(status, []).find do |speedup_obj|
+        speedup_obj[:name] == name
       end
-
-      @store[status] << offence
-      @store[status].uniq!
     end
   end
 end

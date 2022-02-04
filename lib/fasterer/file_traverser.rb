@@ -97,9 +97,11 @@ module Fasterer
     end
 
     def ignored_offense?(analyzer, offense_name)
-      return if analyzer.inline_speedup_scanner.enabled_offense?(offense_name)
-
-      ignored_speedups.include?(offense_name)
+      offenses = analyzer.errors[offense_name]
+      inline_scanner = analyzer.inline_speedup_scanner
+      ignore_by_config = ignored_speedups.include?(offense_name)
+      enable_by_comment = offenses.any? { |offense| inline_scanner.enabled_speedup?(offense) }
+      ignore_by_config && !enable_by_comment
     end
 
     def output_parse_errors
