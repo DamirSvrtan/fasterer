@@ -28,15 +28,15 @@ describe Fasterer::Analyzer do
 
   context 'with config file' do
     let(:speedup_file_path) { RSpec.root.join('support', 'analyzer', '15_keys_each_vs_each_key.rb') }
-    let(:ignored_speedup) { 'keys_each_vs_each_key' }
+    let(:speedup) { 'keys_each_vs_each_key' }
     let(:file_traverser) { Fasterer::FileTraverser.new(test_file_path) }
     let(:config_file_content) do
       "speedups:\n"\
-        "  #{ignored_speedup}: false"
+        "  #{speedup}: false"
     end
 
-    let(:disable_speedup_comment) { "# fasterer:disable #{ignored_speedup}" }
-    let(:enable_speedup_comment) { "# fasterer:enable #{ignored_speedup}" }
+    let(:disable_speedup_comment) { "# fasterer:disable #{speedup}" }
+    let(:enable_speedup_comment) { "# fasterer:enable #{speedup}" }
 
     before do
       allow_any_instance_of(Fasterer::FileTraverser).to receive(:output).and_return(nil)
@@ -53,7 +53,7 @@ describe Fasterer::Analyzer do
       end
 
       it 'detects an offense with disable speedup in config' do
-        expect(file_traverser.config.ignored_speedups).to include(ignored_speedup.to_sym)
+        expect(file_traverser.config.ignored_speedups).to include(speedup.to_sym)
         expect(file_traverser.offenses_total_count).not_to be_zero
       end
 
@@ -86,7 +86,7 @@ describe Fasterer::Analyzer do
     context 'overriding config' do
       let(:config_file_content) do
         "speedups:\n"\
-        "  #{ignored_speedup}: true"
+        "  #{speedup}: true"
       end
 
       let(:new_test_file_content) do
@@ -114,7 +114,7 @@ describe Fasterer::Analyzer do
       context 'both enable' do
         let(:config_file_content) do
           "speedups:\n"\
-        "  #{ignored_speedup}: true"
+        "  #{speedup}: true"
         end
 
         let(:new_test_file_content) do
@@ -160,8 +160,11 @@ describe Fasterer::Analyzer do
           "#{enable_speedup_comment}\n"\
           "#{included_speedup_file_content}"
         end
+        let(:disabled_speedup) { analyzer.inline_speedup_scanner.instance_variable_get('@store')['disable'].first }
+        let(:enabled_speedup) { analyzer.inline_speedup_scanner.instance_variable_get('@store')['enable'].first }
 
         it 'should detect an error only once' do
+          expect(disabled_speedup[:context].last).to eql enabled_speedup[:context].first
           expect(analyzer.errors[:shuffle_first_vs_sample].count).to eql 5
         end
       end
