@@ -1,8 +1,9 @@
 # Changelog
 
-## (not released yet) 0.10.0
+## 0.10.0
 
 - Due to issues while setting up builds with Github Actions, I have dropped Ruby 2.2 support. It's EOL date was 2018-03-31, and I don't have the bandwidth to support deprecated Ruby versions. The only reason at this point why Ruby versions 2.3, 2.4 and 2.5 are supported is because they still work with other dependencies, so it's no effort currently to support them. Once they become issues, they'll probably be dropped.
+- Upgrade to ruby_parser 3.19.1 that fully supports Ruby 3.1
 
 ## 0.9.0
 
