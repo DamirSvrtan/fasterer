@@ -31,6 +31,8 @@ module Fasterer
         check_each_with_index_offense
       when :first
         check_first_offense
+      when :count
+        check_count_offense
       when :each
         check_each_offense
       when :flatten
@@ -88,6 +90,12 @@ module Fasterer
         return unless method_call.receiver.has_block?
 
         add_offense(:select_first_vs_detect)
+      end
+    end
+
+    def check_count_offense
+      if method_call.arguments.count.zero? && !method_call.has_block?
+        add_offense(:count_vs_size)
       end
     end
 
