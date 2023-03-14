@@ -9,3 +9,5 @@ end.first
 ARRAY.select(&:zero?).first
 
 ActiveRecordRelation.new.select('name').first
+
+ARRAY.select { |x| x.eql?(15) }.first(5)

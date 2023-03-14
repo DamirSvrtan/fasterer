@@ -86,6 +86,7 @@ module Fasterer
         add_offense(:shuffle_first_vs_sample)
       when :select
         return unless method_call.receiver.has_block?
+        return if method_call.arguments.count > 0
 
         add_offense(:select_first_vs_detect)
       end

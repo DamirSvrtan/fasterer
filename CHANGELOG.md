@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.1
+
+- There has been a [bug report #99](https://github.com/DamirSvrtan/fasterer/issues/99) that the `select_first_vs_detect` reports false positives when first gets an argument passed in. If there is an argument passed in, the detect method is not suitable, since it always returns the first element matching (can't return multiple items).
+
 ## 0.10.0
 
 - Due to issues while setting up builds with Github Actions, I have dropped Ruby 2.2 support. It's EOL date was 2018-03-31, and I don't have the bandwidth to support deprecated Ruby versions. The only reason at this point why Ruby versions 2.3, 2.4 and 2.5 are supported is because they still work with other dependencies, so it's no effort currently to support them. Once they become issues, they'll probably be dropped.
