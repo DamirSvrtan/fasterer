@@ -4,6 +4,7 @@ require 'English'
 
 require_relative 'analyzer'
 require_relative 'config'
+require_relative 'explanation'
 
 module Fasterer
   class FileTraverser
@@ -20,6 +21,7 @@ module Fasterer
       @parse_error_paths = []
       @config = Config.new
       @offenses_total_count = 0
+      @explanations = {}
     end
 
     def traverse
@@ -83,7 +85,7 @@ module Fasterer
       offenses_grouped_by_type(analyzer).each do |error_group_name, error_occurences|
         error_occurences.map(&:line_number).each do |line|
           file_and_line = "#{analyzer.file_path}:#{line}"
-          print "#{file_and_line.colorize(:red)} #{Fasterer::Offense::EXPLANATIONS[error_group_name]}.\n"
+          print "#{file_and_line.colorize(:red)} #{explanations(error_group_name)}\n"
         end
       end
 
@@ -125,6 +127,10 @@ module Fasterer
 
     def nil_config_file
       config.nil_file
+    end
+
+    def explanations(offense_name)
+      @explanations[offense_name] ||= Fasterer::Explanation.new(offense_name).call
     end
   end
 
