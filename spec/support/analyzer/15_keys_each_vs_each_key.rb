@@ -13,3 +13,7 @@ HASH.keys.each do |key|
 end
 
 HASH.each_key(&:to_sym)
+
+@redis.keys('queue:*').each do |queue_name|
+  puts queue_name
+end
