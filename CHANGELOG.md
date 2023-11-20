@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.11.0
+
+- There have been multiple issues filed with the colorize gem, such as licencing, gem versions etc. Due to the easy implementation, fasterer will now leverage an internal implementation of this so we don't need to get issues tracked bc of colorize. There might be other issues that arise (perhaps somebody leveraging Windows might have issues), but that's okay, we'll solve it.
+
+- There has been a [bug report #102](https://github.com/DamirSvrtan/fasterer/issues/102) that the Redis `#keys` method shouldn't trigger `Hash#each_key` recommendation. It's not possible to detect that what is the receiver of the keys method call, but the keys method called on the Hash doesn't accept arguments while the redis one does. So not an ideal solution, but should fix any issues for now.
+
+
 ## 0.10.1
 
 - There has been a [bug report #99](https://github.com/DamirSvrtan/fasterer/issues/99) that the `select_first_vs_detect` reports false positives when first gets an argument passed in. If there is an argument passed in, the detect method is not suitable, since it always returns the first element matching (can't return multiple items).
