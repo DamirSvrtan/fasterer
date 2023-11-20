@@ -157,6 +157,8 @@ module Fasterer
 
       case method_call.receiver.name
       when :select
+        return if method_call.arguments.count > 0
+
         add_offense(:select_last_vs_reverse_detect)
       end
     end
