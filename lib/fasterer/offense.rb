@@ -52,6 +52,9 @@ module Fasterer
       hash_merge_bang_vs_hash_brackets:
         'Hash#merge! with one argument is slower than Hash#[]',
 
+      hash_update_vs_hash_brackets:
+        'Hash#update with one argument is slower than Hash#[]',
+
       block_vs_symbol_to_proc:
         'Calling argumentless methods within blocks is slower than using symbol to proc',
 

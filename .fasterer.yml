@@ -12,6 +12,7 @@ speedups:
   fetch_with_argument_vs_block: true
   keys_each_vs_each_key: true
   hash_merge_bang_vs_hash_brackets: true
+  hash_update_vs_hash_brackets: true
   block_vs_symbol_to_proc: true
   proc_call_vs_yield: true
   gsub_vs_tr: true
