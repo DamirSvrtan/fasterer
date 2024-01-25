@@ -92,8 +92,16 @@ module Fasterer
 
     def offenses_grouped_by_type(analyzer)
       analyzer.errors.group_by(&:name).delete_if do |offense_name, _|
-        ignored_speedups.include?(offense_name)
+        ignored_offense?(analyzer, offense_name)
       end
+    end
+
+    def ignored_offense?(analyzer, offense_name)
+      offenses = analyzer.errors[offense_name]
+      inline_scanner = analyzer.inline_speedup_scanner
+      ignore_by_config = ignored_speedups.include?(offense_name)
+      enable_by_comment = offenses.any? { |offense| inline_scanner.enabled_speedup?(offense) }
+      ignore_by_config && !enable_by_comment
     end
 
     def output_parse_errors
