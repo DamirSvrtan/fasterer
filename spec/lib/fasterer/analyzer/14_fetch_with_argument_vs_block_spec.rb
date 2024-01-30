@@ -6,6 +6,6 @@ describe Fasterer::Analyzer do
   it 'should detect keys fetch with argument once' do
     analyzer = Fasterer::Analyzer.new(test_file_path)
     analyzer.scan
-    expect(analyzer.errors[:fetch_with_argument_vs_block].count).to eq(1)
+    expect(analyzer.errors[:fetch_with_argument_vs_block].count).to eq(4)
   end
 end

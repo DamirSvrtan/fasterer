@@ -1,11 +1,23 @@
 HASH = { :writing => :fast_ruby }
 
 def slow
-  HASH.fetch(:writing, [*1..100])
+  HASH.fetch(:writing) { nil }
+end
+
+def slow
+  HASH.fetch(:writing) { 1 }
+end
+
+def slow
+  HASH.fetch(:writing) { "1" }
+end
+
+def slow
+  HASH.fetch(:writing) { true }
 end
 
 def fast
-  HASH.fetch(:writing) { [*1..100] }
+  HASH.fetch(:writng, 1)
 end
 
 HASH.fetch(:writing)

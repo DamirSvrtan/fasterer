@@ -44,7 +44,7 @@ module Fasterer
         'Enumerable#sort is slower than Enumerable#sort_by',
 
       fetch_with_argument_vs_block:
-        'Hash#fetch with second argument is slower than Hash#fetch with block',
+        'Hash#fetch with block of primitive data types like: String, Integer, Symbol, Boolean or Nil is slower than Hash#fetch with second argument',
 
       keys_each_vs_each_key:
         'Hash#keys.each is slower than Hash#each_key. N.B. Hash#each_key cannot be used if the hash is modified during the each block',
