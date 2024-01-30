@@ -3,7 +3,7 @@ module Fasterer
     COLOR_CODES = {
       red: 31,
       green: 32,
-    }
+    }.freeze
 
     def self.paint(string, color)
       color_code = COLOR_CODES[color.to_sym]
